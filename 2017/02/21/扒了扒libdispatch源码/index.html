@@ -1,0 +1,386 @@
+
+
+<!DOCTYPE html>
+<html lang="null">
+<head prefix="og: http://ogp.me/ns#">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <meta name="description" content="null">
+    <title>扒了扒libdispatch源码 | Joe&#39;s Doc</title>
+
+    <!-- Open Graph -->
+    <meta name="description" content="&amp;#x672C;&amp;#x6587;&amp;#x94FE;&amp;#x63A5;&amp;#xFF1A;http://yoursite.com/2017/02/21/&amp;#x6252;&amp;#x4E86;&amp;#x6252;libdispatch&amp;#x6E90;&amp;#x7801;/">
+<meta property="og:type" content="article">
+<meta property="og:title" content="扒了扒libdispatch源码">
+<meta property="og:url" content="http://yoursite.com/2017/02/21/扒了扒libdispatch源码/index.html">
+<meta property="og:site_name" content="Joe's Doc">
+<meta property="og:description" content="&amp;#x672C;&amp;#x6587;&amp;#x94FE;&amp;#x63A5;&amp;#xFF1A;http://yoursite.com/2017/02/21/&amp;#x6252;&amp;#x4E86;&amp;#x6252;libdispatch&amp;#x6E90;&amp;#x7801;/">
+<meta property="og:updated_time" content="2017-02-22T09:17:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="扒了扒libdispatch源码">
+<meta name="twitter:description" content="&amp;#x672C;&amp;#x6587;&amp;#x94FE;&amp;#x63A5;&amp;#xFF1A;http://yoursite.com/2017/02/21/&amp;#x6252;&amp;#x4E86;&amp;#x6252;libdispatch&amp;#x6E90;&amp;#x7801;/">
+
+    <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Person",
+  "email": "mailto:undefined",
+  "image": "undefined",
+  "name": "Joe Lee",
+  "url": "http://yoursite.com"
+}
+</script>
+    <script>
+    var algoliaEnabled = false;
+    
+</script>
+
+    
+
+    
+    
+        <link href="https://fonts.gmirror.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+    
+    
+    
+        <!-- stylesheets list from config.yml -->
+        
+        <link rel="stylesheet" href="/css/aloha.css">
+        
+        <link rel="stylesheet" href="//cdn.bootcss.com/semantic-ui/2.2.4/semantic.min.css">
+        
+        <link rel="stylesheet" href="//cdn.bootcss.com/magnific-popup.js/1.1.0/magnific-popup.min.css">
+        
+    
+
+</head>
+<body id="body" style="margin-bottom: 0;" class="pushable">
+
+    <div class="ui top fixed menu">
+        <a class="item" id="menu-icon"><i class="sidebar icon"></i></a>
+    </div>
+
+    <div id="menu-sidebar" class="ui left vertical sidebar menu">
+
+    <div id="sidebar-top">
+        <div class="content">
+            <h3>Joe&#39;s Doc</h3>
+        </div>
+    </div>
+    <div class="ui container sidebar-card">
+    <div class="ui people shape content">
+        <div class="active side">
+            <div class="ui card">
+                <div class="image">
+                    <img class="ui medium bordered image" src="/images/me.jpg">
+                </div>
+                <div class="content">
+                    <a class="header">Joe Lee</a>
+                    
+                        <div class="meta">
+                            Developer/iOS/Basketball
+                        </div>
+                    
+                </div>
+                <div class="extra content">
+                    <div class="ui list">
+                        
+                        <div class="item">
+                            <i class="marker icon" style="float: left"></i>
+                            <div class="content">Beijing</div>
+                        </div>
+                        
+                        
+                        <div class="item">
+                            <i class="mail icon" style="float: left"></i>
+                            <div class="content">
+                                <a href="mailto:zhuocheng.lee@gmail.com">zhuocheng.lee@gmail.com</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                </div>
+                <div class="extra content">
+                    <div class="ui list">
+                        
+
+                                <a href="https://github.com/joeleee"><i class="large github icon" style="float: left"></i></a>
+
+                            
+
+                                <a href="http://weibo.com/209093838?is_all=1"><i class="large weibo icon" style="float: left"></i></a>
+
+                            
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+    
+    
+
+    
+
+    
+    <a href="/index.html" class="item" >
+        <i class="home icon"></i>
+        Home
+    </a>
+
+    
+
+    
+</div>
+
+    <div class="pusher body-content">
+        <div id="content" class="ui main container">
+            <!--<div class="ui one column grid">-->
+                <!--<div class="column">-->
+                    <!--<div class="ui main container">-->
+                        <div id="post-扒了扒libdispatch源码" class="ui main container article-type-post">
+
+    
+
+    <div class="ui divided grid">
+
+        <div class="two column row" id="article-content">
+
+            <div class="thirteen wide computer thirteen wide tablet sixteen wide mobile column">
+                
+
+<h1 class="ui header">
+    
+    扒了扒libdispatch源码
+</h1>
+
+
+
+                <div class="article-inner">
+
+                    <div class="article-entry" itemprop="articleBody">
+                        
+                        <hr>
+<p>&#x672C;&#x6587;&#x94FE;&#x63A5;&#xFF1A;<a href="http://yoursite.com/2017/02/21/&#x6252;&#x4E86;&#x6252;libdispatch&#x6E90;&#x7801;/">http://yoursite.com/2017/02/21/&#x6252;&#x4E86;&#x6252;libdispatch&#x6E90;&#x7801;/</a></p>
+
+                        
+                    </div>
+
+                    
+                    
+                    
+
+                    <div class="description post-description">
+    <span class="post-description-item">
+        <time datetime="2017-02-21T07:47:10.000Z" itemprop="datePublished">2017-02-21</time>
+
+    </span>
+    <span class="post-description-item">
+        
+
+    <span>
+        <i class="tags icon"></i>
+    </span>
+
+    
+    <span class="ui tiny label">
+        <a href="/tags/libdispatch/">libdispatch</a>
+    </span>
+
+    
+    <span class="ui tiny label">
+        <a href="/tags/GCD/">GCD</a>
+    </span>
+
+    
+
+    </span>
+</div>
+
+                </div>
+                
+                <div id="pagination" class="nav-web ui text container pagination">
+
+    <div class="ui stackable two column divided grid container">
+        <div class="row">
+            <div class="column nav-left">
+                
+
+                <a class="ui tiny button disabled"><i class="angle left icon"></i>Previous</a>
+
+                
+            </div>
+            <div class="column nav-right">
+                
+
+                <a href="/2017/01/18/Hi-Hexo/" class="ui tiny button">
+                    
+                    Hi Hexo
+                    
+                    <i class="angle right icon"></i></a>
+                
+            </div>
+        </div>
+    </div>
+
+</div>
+                
+            </div>
+
+            
+            <div class="three wide computer three wide tablet column">
+
+                <div class="ui sticky article-toc" id="article-toc">
+                    <!-- toc -->
+                    
+                </div>
+
+            </div>
+            
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- css -->
+  <style type="text/css">
+      .center {
+          text-align: center;
+      }
+      .hidden {
+          display: none;
+      }
+    .donate_bar a.btn_donate{
+      display: inline-block;
+      width: 82px;
+      height: 82px;
+      background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+      _background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+      <!-- http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif
+           因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+         为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+         嵌入其它博客时不一定要它们。 -->
+      -webkit-transition: background 0s;
+      -moz-transition: background 0s;
+      -o-transition: background 0s;
+      -ms-transition: background 0s;
+      transition: background 0s;
+      <!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+    }
+    .donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+    .donate_bar .donate_txt {
+      display: block;
+      color: #9d9d9d;
+      font: 14px/2 "Microsoft Yahei";
+    }
+    .bold{ font-weight: bold; }
+  </style>
+<!-- /css -->
+<!-- Donate Module -->
+  <div id="donate_module">
+  <!-- btn_donate & tips -->
+    <div id="donate_board" class="donate_bar center">      
+    <br>
+    <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+    <span class="donate_txt">
+      我知道不会有人打赏，可是万一有人想不开呢？
+    </span>    
+    </div>
+  <!-- /btn_donate & tips -->
+  <!-- donate guide -->
+    <div id="donate_guide" class="donate_bar center hidden">
+    <br>
+      <a href="http://img0.ph.126.net/5t7KkPIOwH4qaGW_9UQthg==/6632008947654510252.jpg" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+        <img src="http://img0.ph.126.net/5t7KkPIOwH4qaGW_9UQthg==/6632008947654510252.jpg" title="微信打赏 Delia" height="190px" width="auto"/>
+      </a>&nbsp;&nbsp;
+      <a href="http://img0.ph.126.net/LEilfwxb09aZ9Jh4WT_eXg==/6632355293814588072.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+        <img src="http://img0.ph.126.net/LEilfwxb09aZ9Jh4WT_eXg==/6632355293814588072.jpg" title="支付宝打赏 Delia" height="190px" width="auto"/>
+      </a>
+      <span class="donate_txt">
+        我知道不会有人打赏，可是万一有人想不开呢？
+      </span>
+    </div>
+  <!-- /donate guide -->
+<!-- donate script -->
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function() {
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+    function donate_on_web(){
+      $('#donate').submit();
+        }
+    var original_window_onload = window.onload;
+        window.onload = function () {
+            if (original_window_onload) {
+                original_window_onload();
+            }
+            //document.getElementById('donate_board_wdg').className = 'hidden';
+    }
+  </script>
+<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+
+
+
+
+<!-- duoshuo start -->
+<div class="ds-thread" data-thread-key="2017/02/21/扒了扒libdispatch源码/" data-title="扒了扒libdispatch源码 | Joe&#39;s Doc" data-url="http://yoursite.com/2017/02/21/扒了扒libdispatch源码/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"joegithubio"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- duoshuo end -->
+
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+        <div class="ui vertical footer segment">
+    <div class="ui center aligned container">
+        <div class="ui inverted section divider"></div>
+        &copy; 2017 <a href="/">Joe Lee</a>,
+        Powered by <a href="https://github.com/henryhuang/hexo-theme-aloha" target="_blank">Aloha</a> and <a
+                href="http://hexo.io/" target="_blank">Hexo</a>.
+    </div>
+</div>
+
+    </div>
+
+
+
+
+<!-- scripts list from theme config.yml -->
+
+<script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+
+<script src="//cdn.bootcss.com/semantic-ui/2.2.4/semantic.min.js"></script>
+
+<script src="//cdn.bootcss.com/algoliasearch/3.18.1/algoliasearch.min.js"></script>
+
+<script src="//cdn.bootcss.com/algoliasearch-helper-js/2.13.0/algoliasearch.helper.min.js"></script>
+
+<script src="/js/semantic-ui-algolia.js"></script>
+
+<script src="/js/aloha-events.js"></script>
+
+
+
+</body>
+</html>
