@@ -9,13 +9,19 @@
     <title>扒了扒libdispatch源码 | Joe&#39;s Doc</title>
 
     <!-- Open Graph -->
-    <meta property="og:type" content="article">
+    <meta name="description" content="&amp;#x524D;&amp;#x51E0;&amp;#x5929;&amp;#x6252;&amp;#x4E86;&amp;#x4E00;&amp;#x4E0B;libdispatch&amp;#x7684;&amp;#x6E90;&amp;#x7801;&amp;#xFF0C;&amp;#x5F53;&amp;#x524D;&amp;#x6700;&amp;#x65B0;&amp;#x7684;&amp;#x662F; libdispatch-703.30.5.tar
+12345678void _dispatch_thre">
+<meta property="og:type" content="article">
 <meta property="og:title" content="扒了扒libdispatch源码">
 <meta property="og:url" content="http://yoursite.com/2017/02/21/扒了扒libdispatch源码/index.html">
 <meta property="og:site_name" content="Joe's Doc">
-<meta property="og:updated_time" content="2017-02-22T09:17:14.000Z">
+<meta property="og:description" content="&amp;#x524D;&amp;#x51E0;&amp;#x5929;&amp;#x6252;&amp;#x4E86;&amp;#x4E00;&amp;#x4E0B;libdispatch&amp;#x7684;&amp;#x6E90;&amp;#x7801;&amp;#xFF0C;&amp;#x5F53;&amp;#x524D;&amp;#x6700;&amp;#x65B0;&amp;#x7684;&amp;#x662F; libdispatch-703.30.5.tar
+12345678void _dispatch_thre">
+<meta property="og:updated_time" content="2017-02-22T16:00:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="扒了扒libdispatch源码">
+<meta name="twitter:description" content="&amp;#x524D;&amp;#x51E0;&amp;#x5929;&amp;#x6252;&amp;#x4E86;&amp;#x4E00;&amp;#x4E0B;libdispatch&amp;#x7684;&amp;#x6E90;&amp;#x7801;&amp;#xFF0C;&amp;#x5F53;&amp;#x524D;&amp;#x6700;&amp;#x65B0;&amp;#x7684;&amp;#x662F; libdispatch-703.30.5.tar
+12345678void _dispatch_thre">
 
     <script type="application/ld+json">
 {
@@ -161,7 +167,8 @@
 
                     <div class="article-entry" itemprop="articleBody">
                         
-                        
+                        <p>&#x524D;&#x51E0;&#x5929;&#x6252;&#x4E86;&#x4E00;&#x4E0B;libdispatch&#x7684;&#x6E90;&#x7801;&#xFF0C;&#x5F53;&#x524D;&#x6700;&#x65B0;&#x7684;&#x662F; libdispatch-703.30.5.tar</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> _dispatch_thread_event_wait_slow(<span class="keyword">dispatch_thread_event_t</span> dte) {</div><div class="line">    <span class="keyword">kern_return_t</span> kr;</div><div class="line">    <span class="keyword">do</span> {</div><div class="line">        kr = semaphore_wait(dte-&gt;dte_semaphore);</div><div class="line">    } <span class="keyword">while</span> (unlikely(kr == KERN_ABORTED));</div><div class="line">    DISPATCH_SEMAPHORE_VERIFY_KR(kr);</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">}</div></pre></td></tr></table></figure>
                         
                     </div>
 
@@ -292,11 +299,11 @@
     <div id="donate_guide" class="donate_bar center hidden">
     <br>
       <a title="用微信扫一扫哦~" class="fancybox" rel="article0">
-        <img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b10000_10000&amp;sec=1488363649&amp;di=af71ddbd9eef14ebad060c925ccff922&amp;imgtype=jpg&amp;src=http%3A%2F%2Fg.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F267f9e2f07082838699a738cb199a9014d08f197.jpg" title="微信打赏 Delia" height="190px" width="auto"/>
+        <img src="/images/wechat_small.jpg" title="微信打赏 Delia" height="190px" width="auto"/>
       </a>&nbsp;&nbsp;
       <!-- 暂时不需要支付宝，只用微信支付就好了
-      <a href="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b10000_10000&amp;sec=1488363614&amp;di=be070d0cdb164f56c13f6b816a93bb84&amp;imgtype=jpg&amp;src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Ff636afc379310a55e47a716cbe4543a9832610cf.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-        <img src="https://timgsa.baidu.com/timg?image&amp;quality=80&amp;size=b10000_10000&amp;sec=1488363614&amp;di=be070d0cdb164f56c13f6b816a93bb84&amp;imgtype=jpg&amp;src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Ff636afc379310a55e47a716cbe4543a9832610cf.jpg" title="支付宝打赏 Delia" height="190px" width="auto"/>
+      <a href="/images/alipay_small.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+        <img src="/images/alipay_small.jpg" title="支付宝打赏 Delia" height="190px" width="auto"/>
       </a>
       -->
       <span class="donate_txt">
