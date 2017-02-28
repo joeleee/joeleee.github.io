@@ -1,0 +1,423 @@
+
+
+<!DOCTYPE html>
+<html lang="null">
+<head prefix="og: http://ogp.me/ns#">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <meta name="description" content="null">
+    <title>设计模式-一句话版 | Joe&#39;s Doc</title>
+
+    <!-- Open Graph -->
+    <meta name="description" content="&amp;#x51E0;&amp;#x4E2A;&amp;#x8981;&amp;#x70B9;SRP &amp;#x5355;&amp;#x4E00;&amp;#x804C;&amp;#x8D23;&amp;#xFF0C;&amp;#x4F60;&amp;#x61C2;&amp;#x7684;&amp;#xFF0C;Single Responsibility Principle
+OCP &amp;#x5F00;&amp;#x653E;&amp;#x5C01;&amp;#x95ED;&amp;#xFF0C;&amp;#x4E0D;&amp;#x89E3;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式-一句话版">
+<meta property="og:url" content="http://yoursite.com/2014/04/24/设计模式-一句话版/index.html">
+<meta property="og:site_name" content="Joe's Doc">
+<meta property="og:description" content="&amp;#x51E0;&amp;#x4E2A;&amp;#x8981;&amp;#x70B9;SRP &amp;#x5355;&amp;#x4E00;&amp;#x804C;&amp;#x8D23;&amp;#xFF0C;&amp;#x4F60;&amp;#x61C2;&amp;#x7684;&amp;#xFF0C;Single Responsibility Principle
+OCP &amp;#x5F00;&amp;#x653E;&amp;#x5C01;&amp;#x95ED;&amp;#xFF0C;&amp;#x4E0D;&amp;#x89E3;">
+<meta property="og:updated_time" content="2017-02-28T16:42:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式-一句话版">
+<meta name="twitter:description" content="&amp;#x51E0;&amp;#x4E2A;&amp;#x8981;&amp;#x70B9;SRP &amp;#x5355;&amp;#x4E00;&amp;#x804C;&amp;#x8D23;&amp;#xFF0C;&amp;#x4F60;&amp;#x61C2;&amp;#x7684;&amp;#xFF0C;Single Responsibility Principle
+OCP &amp;#x5F00;&amp;#x653E;&amp;#x5C01;&amp;#x95ED;&amp;#xFF0C;&amp;#x4E0D;&amp;#x89E3;">
+
+    <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Person",
+  "email": "mailto:undefined",
+  "image": "undefined",
+  "name": "Joe Lee",
+  "url": "http://yoursite.com"
+}
+</script>
+    <script>
+    var algoliaEnabled = false;
+    
+</script>
+
+    
+
+    
+    
+        <link href="https://fonts.gmirror.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+    
+    
+    
+        <!-- stylesheets list from config.yml -->
+        
+        <link rel="stylesheet" href="/css/aloha.css">
+        
+        <link rel="stylesheet" href="//cdn.bootcss.com/semantic-ui/2.2.4/semantic.min.css">
+        
+        <link rel="stylesheet" href="//cdn.bootcss.com/magnific-popup.js/1.1.0/magnific-popup.min.css">
+        
+    
+
+</head>
+<body id="body" style="margin-bottom: 0;" class="pushable">
+
+    <div class="ui top fixed menu">
+        <a class="item" id="menu-icon"><i class="sidebar icon"></i></a>
+    </div>
+
+    <div id="menu-sidebar" class="ui left vertical sidebar menu">
+
+    <div id="sidebar-top">
+        <div class="content">
+            <h3>Joe&#39;s Doc</h3>
+        </div>
+    </div>
+    <div class="ui container sidebar-card">
+    <div class="ui people shape content">
+        <div class="active side">
+            <div class="ui card">
+                <div class="image">
+                    <img class="ui medium bordered image" src="/images/me.jpg">
+                </div>
+                <div class="content">
+                    <a class="header">Joe Lee</a>
+                    
+                        <div class="meta">
+                            Developer/iOS/Basketball
+                        </div>
+                    
+                </div>
+                <div class="extra content">
+                    <div class="ui list">
+                        
+                        <div class="item">
+                            <i class="marker icon" style="float: left"></i>
+                            <div class="content">Beijing</div>
+                        </div>
+                        
+                        
+                        <div class="item">
+                            <i class="mail icon" style="float: left"></i>
+                            <div class="content">
+                                <a href="mailto:zhuocheng.lee@gmail.com">zhuocheng.lee@gmail.com</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                </div>
+                <div class="extra content">
+                    <div class="ui list">
+                        
+
+                                <a href="https://github.com/joeleee"><i class="large github icon" style="float: left"></i></a>
+
+                            
+
+                                <a href="http://weibo.com/209093838?is_all=1"><i class="large weibo icon" style="float: left"></i></a>
+
+                            
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+    
+    
+
+    
+
+    
+    <a href="/index.html" class="item" >
+        <i class="home icon"></i>
+        Home
+    </a>
+
+    
+
+    
+</div>
+
+    <div class="pusher body-content">
+        <div id="content" class="ui main container">
+            <!--<div class="ui one column grid">-->
+                <!--<div class="column">-->
+                    <!--<div class="ui main container">-->
+                        <div id="post-设计模式-一句话版" class="ui main container article-type-post">
+
+    
+
+    <div class="ui divided grid">
+
+        <div class="two column row" id="article-content">
+
+            <div class="thirteen wide computer thirteen wide tablet sixteen wide mobile column">
+                
+
+<h1 class="ui header">
+    
+    设计模式-一句话版
+</h1>
+
+
+
+                <div class="article-inner">
+
+                    <div class="article-entry" itemprop="articleBody">
+                        
+                        <h1 id="&#x51E0;&#x4E2A;&#x8981;&#x70B9;"><a href="#&#x51E0;&#x4E2A;&#x8981;&#x70B9;" class="headerlink" title="&#x51E0;&#x4E2A;&#x8981;&#x70B9;"></a>&#x51E0;&#x4E2A;&#x8981;&#x70B9;</h1><p>SRP &#x5355;&#x4E00;&#x804C;&#x8D23;&#xFF0C;&#x4F60;&#x61C2;&#x7684;&#xFF0C;Single Responsibility Principle</p>
+<p>OCP &#x5F00;&#x653E;&#x5C01;&#x95ED;&#xFF0C;&#x4E0D;&#x89E3;&#x91CA;&#xFF0C;Open Closed Principle</p>
+<p>DIP &#x4F9D;&#x8D56;&#x5012;&#x8F6C;&#x539F;&#x5219;&#xFF0C;&#x9AD8;&#x5C42;&#x548C;&#x4F4E;&#x5C42;&#x90FD;&#x5E94;&#x8BE5;&#x53EA;&#x4F9D;&#x8D56;&#x4E8E;&#x62BD;&#x8C61;&#xFF0C;Dependence Inversion Principle</p>
+<p>LSP &#x91CC;&#x6C0F;&#x4EE3;&#x6362;&#xFF0C;&#x5B50;&#x7C7B;&#x80FD;&#x591F;&#x4EE3;&#x66FF;&#x7236;&#x7C7B;&#xFF0C;Liskov Substitution Principle</p>
+<p>CARP &#x5408;&#x6210;/&#x805A;&#x5408;&#x590D;&#x7528;&#x539F;&#x5219;&#xFF0C;&#x5C3D;&#x91CF;&#x7528;&#x5408;&#x6210;&#x3001;&#x805A;&#x5408;&#x4EE3;&#x66FF;&#x7EE7;&#x627F;&#xFF0C;Composite/Aggregate Reuse Principle</p>
+<p>LoD &#x8FEA;&#x7C73;&#x7279;&#x6CD5;&#x5219;&#xFF0C;&#x4E24;&#x4E2A;&#x7C7B;&#x51CF;&#x5C11;&#x76F4;&#x63A5;&#x901A;&#x4FE1;&#xFF0C;&#x4E0D;&#x8981;&#x548C;&#x964C;&#x751F;&#x4EBA;&#x8BF4;&#x8BDD;&#xFF0C;&#x4E0D;&#x8BE5;&#x77E5;&#x9053;&#x7684;&#x4E0D;&#x53BB;&#x77E5;&#x9053;&#xFF0C;&#x8BE5;&#x77E5;&#x9053;&#x7684;&#x4E5F;&#x5C11;&#x77E5;&#x9053;&#xFF0C;Law of Demeter</p>
+<hr>
+<h1 id="&#x521B;&#x5EFA;&#x578B;"><a href="#&#x521B;&#x5EFA;&#x578B;" class="headerlink" title="&#x521B;&#x5EFA;&#x578B;"></a>&#x521B;&#x5EFA;&#x578B;</h1><p>sample factory &#x7B80;&#x5355;&#x5DE5;&#x5382;&#x6A21;&#x5F0F;&#xFF0C;&#x5C06;&#x5BF9;&#x8C61;&#x7684;&#x521B;&#x5EFA;&#x5199;&#x5728;&#x5DE5;&#x5382;&#x4E2D;&#xFF0C;&#x4F1A;&#x6709;&#x4E2A;&#x5927;switch case</p>
+<p>factory method &#x5DE5;&#x5382;&#x65B9;&#x6CD5;&#x6A21;&#x5F0F;&#xFF0C;&#x5177;&#x4F53;&#x751F;&#x6210;&#x54EA;&#x4E2A;&#x7C7B;&#x7531;&#x5BA2;&#x6237;&#x7AEF;&#x8C03;&#x7528;&#x4E0D;&#x540C;&#x7684;&#x63A5;&#x53E3;&#x521B;&#x5EFA;abstract factory &#x62BD;&#x8C61;&#x5DE5;&#x5382;&#x6A21;&#x5F0F;&#xFF0C;&#x5229;&#x7528;&#x53CD;&#x5C04;&#xFF0C;&#x52A8;&#x6001;&#x751F;&#x6210;&#x5DE5;&#x5382;</p>
+<p>singleton &#x5355;&#x4F8B;&#x6A21;&#x5F0F;&#xFF0C;&#x4E0D;&#x5570;&#x55E6;&#x4E86;&#xFF0C;&#x6CE8;&#x610F;&#x591A;&#x7EBF;&#x7A0B;&#x5B89;&#x5168;</p>
+<p>prototype &#x539F;&#x578B;&#x6A21;&#x5F0F;&#xFF0C;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#xFF0C;&#x540E;&#x9762;&#x5728;&#x9700;&#x8981;&#x521B;&#x5EFA;&#x7684;&#x65F6;&#x5019;&#x62F7;&#x8D1D;&#x81EA;&#x5DF1;&#xFF0C;copy resume</p>
+<p>builder &#x5EFA;&#x9020;&#x8005;&#x6A21;&#x5F0F;&#xFF0C;&#x5C06;&#x6D41;&#x7A0B;&#x4E0E;&#x7EC6;&#x8282;&#x5206;&#x79BB;&#xFF0C;bulider&#x53EA;&#x8D1F;&#x8D23;&#x63A7;&#x5236;&#x6D41;&#x7A0B;&#xFF0C;&#x6BCF;&#x4E2A;&#x8282;&#x70B9;&#x7684;&#x7EC6;&#x8282;&#x5355;&#x72EC;&#x5B9E;&#x73B0;</p>
+<hr>
+<h1 id="&#x7ED3;&#x6784;&#x578B;"><a href="#&#x7ED3;&#x6784;&#x578B;" class="headerlink" title="&#x7ED3;&#x6784;&#x578B;"></a>&#x7ED3;&#x6784;&#x578B;</h1><p>adapter &#x9002;&#x914D;&#x5668;&#x6A21;&#x5F0F;&#xFF0C;&#x76F8;&#x5F53;&#x4E8E;&#x8F6C;&#x63A5;&#x5934;&#xFF0C;&#x5E38;&#x7528;&#x4E8E;&#x63A5;&#x53E3;&#x4E0D;&#x517C;&#x5BB9;&#xFF0C;&#x53C8;&#x4E0D;&#x80FD;&#x6539;</p>
+<p>bridge &#x6865;&#x63A5;&#x6A21;&#x5F0F;&#xFF0C;&#x5C06;&#x4E00;&#x4E2A;&#x5927;&#x7C7B;&#x7684;&#x591A;&#x4E2A;&#x529F;&#x80FD;&#x7528;&#x82E5;&#x5E72;&#x4E2A;&#x5C0F;&#x7C7B;&#x5B9E;&#x73B0;&#x7EC6;&#x8282;&#xFF0C;&#x7528;&#x5408;&#x6210;/&#x805A;&#x5408;&#x7684;&#x65B9;&#x5F0F;&#x7EC4;&#x5408;&#xFF0C;&#x540C;CARP&#x539F;&#x5219;</p>
+<p>composite &#x7EC4;&#x5408;&#x6A21;&#x5F0F;&#xFF0C;&#x7236;&#x7C7B;&#x5B9E;&#x73B0;&#x4E00;&#x4E2A;&#x6700;&#x5927;&#x5316;&#x7684;&#x63A5;&#x53E3;&#xFF0C;&#x5B50;&#x7C7B;&#x6309;&#x9700;&#x91CD;&#x8F7D;&#x3001;&#x6269;&#x5C55;&#xFF0C;&#x50CF;&#x4E00;&#x68F5;&#x6811;&#xFF0C;&#x7236;&#x7C7B;&#x662F;&#x6811;&#x7684;&#x6839;</p>
+<p>decorator &#x88C5;&#x9970;&#x6A21;&#x5F0F;&#xFF0C;&#x5728;&#x88C5;&#x9970;&#x7684;&#x5B50;&#x7C7B;&#x4E4B;&#x95F4;&#x4F20;&#x9012;&#x9700;&#x8981;&#x88AB;&#x88C5;&#x9970;&#x7684;&#x7C7B;&#xFF0C;&#x6700;&#x7EC8;&#x90FD;&#x4F1A;&#x8C03;&#x7528;&#x88AB;&#x88C5;&#x9970;&#x5BF9;&#x8C61;&#x672C;&#x8EAB;&#x7684;root&#x88C5;&#x9970;&#x65B9;&#x6CD5;</p>
+<p>facade &#x5916;&#x89C2;&#x6A21;&#x5F0F;&#xFF0C;&#x5C01;&#x88C5;&#x5E95;&#x5C42;&#xFF0C;&#x63D0;&#x4F9B;&#x7EDF;&#x4E00;&#x7684;&#x5BF9;&#x5916;&#x63A5;&#x53E3;&#x51FA;&#x5904;&#xFF0C;Manager&#x5C42;</p>
+<p>flyweight &#x4EAB;&#x5143;&#x6A21;&#x5F0F;&#xFF0C;&#x4E00;&#x4E2A;&#x7C7B;&#x7684;&#x6BCF;&#x4E2A;&#x5BF9;&#x8C61;&#x5982;&#x679C;&#x90FD;&#x6709;&#x5171;&#x540C;&#x7684;&#x6210;&#x5458;&#xFF0C;&#x53EF;&#x4EE5;&#x628A;&#x6240;&#x6709;&#x8BE5;&#x7C7B;&#x5BF9;&#x8C61;&#x7684;&#x6210;&#x5458;&#x53D8;&#x6210;&#x540C;&#x4E00;&#x4E2A;&#xFF0C;&#x4F8B;&#x5982;NSString&#x7684;&#x590D;&#x7528;</p>
+<p>proxy &#x4EE3;&#x7406;&#x6A21;&#x5F0F;&#xFF0C;&#x771F;&#x5B9E;&#x5BF9;&#x8C61;&#x4E0D;&#x76F4;&#x63A5;&#x8DDF;&#x5916;&#x754C;&#x6253;&#x4EA4;&#x9053;&#xFF0C;&#x901A;&#x8FC7;&#x4E2D;&#x95F4;&#x4EE3;&#x7406;&#x8C03;&#x7528;&#xFF0C;&#x5C06;&#x6765;&#x65B9;&#x4FBF;&#x66FF;&#x6362;</p>
+<hr>
+<h1 id="&#x884C;&#x4E3A;&#x578B;"><a href="#&#x884C;&#x4E3A;&#x578B;" class="headerlink" title="&#x884C;&#x4E3A;&#x578B;"></a>&#x884C;&#x4E3A;&#x578B;</h1><p>observer &#x89C2;&#x5BDF;&#x8005;&#x6A21;&#x5F0F;&#xFF0C;&#x4E8B;&#x4EF6;&#x59D4;&#x6258;&#xFF0C;&#x88AB;&#x89C2;&#x5BDF;&#x8005;&#x4E0D;&#x77E5;&#x9053;&#x6709;&#x8C01;&#x5728;&#x89C2;&#x5BDF;&#x4ED6;&#xFF0C;&#x89C2;&#x5BDF;&#x8005;&#x4E0D;&#x77E5;&#x9053;&#x662F;&#x8C01;&#x4F1A;&#x901A;&#x77E5;&#x4ED6;</p>
+<p>template method &#x6A21;&#x7248;&#x65B9;&#x6CD5;&#x6A21;&#x5F0F;&#xFF0C;&#x7236;&#x7C7B;&#x8D1F;&#x8D23;&#x63A7;&#x5236;&#x5927;&#x6D41;&#x7A0B;&#xFF0C;&#x5B50;&#x7C7B;&#x91CD;&#x5199;&#x6BCF;&#x4E2A;&#x9700;&#x8981;&#x7684;&#x51FD;&#x6570;&#x53BB;&#x5B9E;&#x73B0;&#x7EC6;&#x8282;</p>
+<p>command &#x547D;&#x4EE4;&#x6A21;&#x5F0F;&#xFF0C;&#x5C06;&#x4E00;&#x6B21;&#x8BF7;&#x6C42;/&#x884C;&#x4E3A;&#x5C01;&#x88C5;&#x6210;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x8FDB;&#x884C;&#x4F20;&#x9012;&#xFF0C;&#x66F4;&#x597D;&#x7684;&#x63A7;&#x5236;</p>
+<p>state &#x72B6;&#x6001;&#x6A21;&#x5F0F;&#xFF0C;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x662F;&#x6709;&#x72B6;&#x6001;&#x7684;&#xFF0C;&#x72B6;&#x6001;&#x5BF9;&#x8C61;&#x7531;&#x522B;&#x4EBA;&#x6301;&#x6709;&#xFF0C;&#x72B6;&#x6001;&#x7684;&#x53D8;&#x5316;&#x7531;&#x72B6;&#x6001;&#x81EA;&#x5DF1;&#x63A7;&#x5236;&#x5B8C;&#x6210;&#xFF0C;&#x72B6;&#x6001;&#x673A;</p>
+<p>chain of responsibility &#x804C;&#x8D23;&#x94FE;&#x6A21;&#x5F0F;&#xFF0C;&#x4E00;&#x4E2A;&#x8BF7;&#x6C42;/&#x884C;&#x4E3A;&#x4F1A;&#x88AB;&#x4E00;&#x5C42;&#x4E00;&#x5C42;&#x7684;&#x4F20;&#x9012;&#x5904;&#x7406;&#xFF0C;&#x6BCF;&#x4E00;&#x5C42;&#x8D1F;&#x8D23;&#x81EA;&#x5DF1;&#x7684;&#x5904;&#x7406;&#x4EE5;&#x53CA;&#x662F;&#x5426;&#x4F20;&#x9012;&#x7ED9;&#x4E0B;&#x4E00;&#x5C42;</p>
+<p>interpreter &#x89E3;&#x91CA;&#x5668;&#x6A21;&#x5F0F;&#xFF0C;&#x5B9A;&#x4E49;&#x4E00;&#x79CD;&#x6587;&#x6CD5;/&#x89C4;&#x5219;&#xFF0C;&#x5C06;&#x7279;&#x5B9A;&#x7684;&#x5185;&#x5BB9;&#x8F6C;&#x6362;&#x6210;&#x53E6;&#x4E00;&#x79CD;&#x5185;&#x5BB9;&#xFF0C;&#x5BCC;&#x6587;&#x672C;&#x89E3;&#x6790;/&#x7F16;&#x8BD1;&#x5668;</p>
+<p>mediator &#x4E2D;&#x4ECB;&#x8005;&#x6A21;&#x5F0F;&#xFF0C;&#x4F7F;&#x7528;&#x4E00;&#x4E2A;&#x4E2D;&#x4ECB;&#x8005;&#x5BF9;&#x8C61;&#x6765;&#x63A7;&#x5236;&#x5404;&#x4E2A;&#x5BF9;&#x8C61;&#x7684;&#x901A;&#x4FE1;/&#x4EA4;&#x4E92;&#xFF0C;&#x540C;LoD&#x6CD5;&#x5219;</p>
+<p>visitor &#x8BBF;&#x95EE;&#x8005;&#x6A21;&#x5F0F;&#xFF0C;A&#x9700;&#x8981;B&#x4F5C;&#x4E3A;&#x53C2;&#x6570;&#xFF0C;A&#x6267;&#x884C;&#x65F6;&#x9700;&#x8981;&#x6267;&#x884C;B&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x540C;&#x65F6;&#x53C8;&#x5C06;&#x81EA;&#x5DF1;&#x4F20;&#x56DE;&#x7ED9;B&#xFF0C;&#x53CC;&#x5206;&#x6D3E;&#x6280;&#x672F;&#xFF0C;B&#x7684;&#x79CD;&#x7C7B;&#x9700;&#x56FA;&#x5B9A;</p>
+<p>strategy &#x7B56;&#x7565;&#x6A21;&#x5F0F;&#xFF0C;&#x7B56;&#x7565;&#x7C7B;&#x63D0;&#x4F9B;&#x7EDF;&#x4E00;&#x5BF9;&#x5916;&#x63A5;&#x53E3;&#xFF0C;&#x7B56;&#x7565;&#x5C01;&#x88C5;&#x5728;&#x7B56;&#x7565;&#x5DE5;&#x5382;&#x4E2D;&#xFF0C;&#x5177;&#x4F53;&#x7684;&#x4E0D;&#x540C;&#x7B56;&#x7565;&#x5728;&#x5177;&#x4F53;&#x7684;&#x7B56;&#x7565;&#x7C7B;&#x5355;&#x72EC;&#x4E2D;&#x5B9E;&#x73B0;</p>
+<p>memento &#x5907;&#x5FD8;&#x5F55;&#x6A21;&#x5F0F;&#xFF0C;&#x6355;&#x83B7;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x7684;&#x5185;&#x90E8;&#x72B6;&#x6001;&#xFF0C;&#x5E76;&#x4FDD;&#x5B58;&#x8FD9;&#x4E2A;&#x72B6;&#x6001;&#xFF0C;&#x5C06;&#x6765;&#x53EF;&#x4EE5;&#x6062;&#x590D;&#xFF0C;NSKeyedArchiver</p>
+<p>iterator &#x8FED;&#x4EE3;&#x5668;&#x6A21;&#x5F0F;&#xFF0C;&#x8FED;&#x4EE3;&#x5668;&#x4E0D;&#x5173;&#x5FC3;&#x904D;&#x5386;&#x7684;&#x662F;&#x8C01;&#xFF0C;&#x5BF9;&#x6240;&#x6709;&#x904D;&#x5386;&#x7684;&#x7C7B;&#x578B;&#x63D0;&#x4F9B;&#x7EDF;&#x4E00;&#x7684;next/first&#x2026;&#x63A5;&#x53E3;</p>
+
+                        
+                    </div>
+
+                    
+                    
+                    
+
+                    <div class="description post-description">
+    <span class="post-description-item">
+        <time datetime="2014-04-24T07:47:10.000Z" itemprop="datePublished">2014-04-24</time>
+
+    </span>
+    <span class="post-description-item">
+        
+
+    <span>
+        <i class="tags icon"></i>
+    </span>
+
+    
+    <span class="ui tiny label">
+        <a href="/tags/Design-pattern/">Design pattern</a>
+    </span>
+
+    
+
+    </span>
+</div>
+
+                </div>
+                
+                <div id="pagination" class="nav-web ui text container pagination">
+
+    <div class="ui stackable two column divided grid container">
+        <div class="row">
+            <div class="column nav-left">
+                
+
+                <a href="/2017/01/18/Hi-Hexo/" class="ui tiny button">
+
+                    <i class="angle left icon"></i>
+                    
+                    Hi Hexo
+                    
+
+                </a>
+
+                
+            </div>
+            <div class="column nav-right">
+                
+
+                <a href="/2014/01/09/In-App-Purcharse 摘要/" class="ui tiny button">
+                    
+                    In-App-Purcharse 摘要
+                    
+                    <i class="angle right icon"></i></a>
+                
+            </div>
+        </div>
+    </div>
+
+</div>
+                
+            </div>
+
+            
+            <div class="three wide computer three wide tablet column">
+
+                <div class="ui sticky article-toc" id="article-toc">
+                    <!-- toc -->
+                    <ol class="ui ordered list"><li><a href="#几个要点"><span>几个要点</span></a></li><li><a href="#创建型"><span>创建型</span></a></li><li><a href="#结构型"><span>结构型</span></a></li><li><a href="#行为型"><span>行为型</span></a></li></ol>
+                </div>
+
+            </div>
+            
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- css -->
+  <style type="text/css">
+      .center {
+          text-align: center;
+      }
+      .hidden {
+          display: none;
+      }
+    .donate_bar a.btn_donate{
+      display: inline-block;
+      width: 82px;
+      height: 82px;
+      background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+      _background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+      <!-- http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif
+           因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+         为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+         嵌入其它博客时不一定要它们。 -->
+      -webkit-transition: background 0s;
+      -moz-transition: background 0s;
+      -o-transition: background 0s;
+      -ms-transition: background 0s;
+      transition: background 0s;
+      <!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+    }
+    .donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+    .donate_bar .donate_txt {
+      display: block;
+      color: #9d9d9d;
+      font: 14px/2 "Microsoft Yahei";
+    }
+    .bold{ font-weight: bold; }
+  </style>
+<!-- /css -->
+<!-- Donate Module -->
+  <div id="donate_module">
+  <!-- btn_donate & tips -->
+    <div id="donate_board" class="donate_bar center">      
+    <br>
+    <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+    <span class="donate_txt">
+      我知道不会有人打赏，可是万一有人想不开呢？
+    </span>    
+    </div>
+  <!-- /btn_donate & tips -->
+  <!-- donate guide -->
+    <div id="donate_guide" class="donate_bar center hidden">
+    <br>
+      <a title="用微信扫一扫哦~" class="fancybox" rel="article0">
+        <img src="/images/wechat_small.jpg" title="微信打赏 Joe" height="190px" width="auto"/>
+      </a>&nbsp;&nbsp;
+      <!-- 暂时不需要支付宝，只用微信支付就好了
+      <a href="/images/alipay_small.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+        <img src="/images/alipay_small.jpg" title="支付宝打赏 Joe" height="190px" width="auto"/>
+      </a>
+      -->
+      <span class="donate_txt">
+        我知道不会有人打赏，可是万一有人想不开呢？
+      </span>
+    </div>
+  <!-- /donate guide -->
+<!-- donate script -->
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function() {
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+    function donate_on_web(){
+      $('#donate').submit();
+        }
+    var original_window_onload = window.onload;
+        window.onload = function () {
+            if (original_window_onload) {
+                original_window_onload();
+            }
+            //document.getElementById('donate_board_wdg').className = 'hidden';
+    }
+  </script>
+<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+
+
+
+
+<!-- duoshuo start -->
+<div class="ds-thread" data-thread-key="2014/04/24/设计模式-一句话版/" data-title="设计模式-一句话版 | Joe&#39;s Doc" data-url="http://yoursite.com/2014/04/24/设计模式-一句话版/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"joegithubio"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- duoshuo end -->
+
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+        <div class="ui vertical footer segment">
+    <div class="ui center aligned container">
+        <div class="ui inverted section divider"></div>
+        &copy; 2017 <a href="/">Joe Lee</a>,
+        Powered by <a href="https://github.com/henryhuang/hexo-theme-aloha" target="_blank">Aloha</a> and <a
+                href="http://hexo.io/" target="_blank">Hexo</a>.
+    </div>
+</div>
+
+    </div>
+
+
+
+
+<!-- scripts list from theme config.yml -->
+
+<script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+
+<script src="//cdn.bootcss.com/semantic-ui/2.2.4/semantic.min.js"></script>
+
+<script src="//cdn.bootcss.com/algoliasearch/3.18.1/algoliasearch.min.js"></script>
+
+<script src="//cdn.bootcss.com/algoliasearch-helper-js/2.13.0/algoliasearch.helper.min.js"></script>
+
+<script src="/js/semantic-ui-algolia.js"></script>
+
+<script src="/js/aloha-events.js"></script>
+
+
+
+</body>
+</html>

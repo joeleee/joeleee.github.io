@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Joe's Doc">
 <meta property="og:description" content="&amp;#x524D;&amp;#x51E0;&amp;#x5929;&amp;#x6252;&amp;#x4E86;&amp;#x4E00;&amp;#x4E0B;libdispatch&amp;#x7684;&amp;#x6E90;&amp;#x7801;&amp;#xFF0C;&amp;#x5F53;&amp;#x524D;&amp;#x6700;&amp;#x65B0;&amp;#x7684;&amp;#x662F; libdispatch-703.30.5&amp;#xFF0C;&amp;#x4E4B;&amp;#x524D;&amp;#x4E5F;">
 <meta property="og:image" content="http://yoursite.com/images/gcd-pool.png">
-<meta property="og:updated_time" content="2017-02-28T12:33:23.000Z">
+<meta property="og:updated_time" content="2017-02-28T16:13:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="扒了扒libdispatch源码">
 <meta name="twitter:description" content="&amp;#x524D;&amp;#x51E0;&amp;#x5929;&amp;#x6252;&amp;#x4E86;&amp;#x4E00;&amp;#x4E0B;libdispatch&amp;#x7684;&amp;#x6E90;&amp;#x7801;&amp;#xFF0C;&amp;#x5F53;&amp;#x524D;&amp;#x6700;&amp;#x65B0;&amp;#x7684;&amp;#x662F; libdispatch-703.30.5&amp;#xFF0C;&amp;#x4E4B;&amp;#x524D;&amp;#x4E5F;">
@@ -175,7 +175,7 @@
 <li>&#x4E00;&#x76F4;&#x60F3;&#x77E5;&#x9053;&#x4E3A;&#x4EC0;&#x4E48; <strong><em>dispatch_sync</em></strong> &#x6B7B;&#x9501;&#x5D29;&#x6E83;&#x662F;&#x8F93;&#x51FA;&#x7684;&#x4FE1;&#x606F;&#x662F; <strong><em>barrier</em></strong></li>
 <li>&#x2026;&#x2026;</li>
 </ul>
-<p>&#x597D;&#x4E86;&#xFF0C;&#x6765;&#x6765;&#x6765;&#xFF0C;&#x6252;&#x6252;&#x6E90;&#x7801;&#x5C31;&#x5168;&#x77E5;&#x9053;&#x4E86;&#xFF0C;&#x5F53;&#x7136;&#x6E90;&#x7801;&#x4E2D;&#x6211;&#x8FD8;&#x662F;&#x6709;&#x5F88;&#x591A;&#x7591;&#x60D1;&#x7684;&#x5730;&#x65B9;&#xFF0C;&#x5E0C;&#x671B;&#x5927;&#x5BB6;&#x62CD;&#xFF0C;&#x53CD;&#x6B63;&#x6211;&#x53EA;&#x662F;&#x642C;&#x8FD0;&#x5DE5;&#xFF0C;&#x54C8;&#x54C8;&#x1F604;</p>
+<p>&#x597D;&#x4E86;&#xFF0C;&#x6765;&#x6765;&#x6765;&#xFF0C;&#x6252;&#x6252;&#x6E90;&#x7801;&#x5C31;&#x5168;&#x77E5;&#x9053;&#x4E86;&#xFF0C;&#x5F53;&#x7136;&#x6E90;&#x7801;&#x4E2D;&#x6211;&#x8FD8;&#x662F;&#x6709;&#x5F88;&#x591A;&#x7591;&#x60D1;&#x7684;&#x5730;&#x65B9;&#xFF0C;&#x6B22;&#x8FCE;&#x5927;&#x5BB6;&#x62CD;&#xFF0C;&#x53CD;&#x6B63;&#x6211;&#x53EA;&#x662F;&#x642C;&#x8FD0;&#x5DE5;&#xFF0C;&#x54C8;&#x54C8;&#x1F604;</p>
 <hr>
 <h1 id="&#x5168;&#x666F;&#x7ED3;&#x6784;&#x56FE;"><a href="#&#x5168;&#x666F;&#x7ED3;&#x6784;&#x56FE;" class="headerlink" title="&#x5168;&#x666F;&#x7ED3;&#x6784;&#x56FE;"></a>&#x5168;&#x666F;&#x7ED3;&#x6784;&#x56FE;</h1><p>&#x5148;&#x770B;&#x8FD9;&#x5F20;&#x6CDB;&#x6EE5;&#x4E86;&#x7684;&#x56FE;&#x5427;&#xFF1A;</p>
 <p><a class="magnific-img" href="/images/gcd-pool.png"><img src="/images/gcd-pool.png" alt="gcd-pool" class="ui centered image"></a></p>
@@ -250,13 +250,14 @@
 <li>&#x5982;&#x679C;&#x662F;&#x4E32;&#x578B;&#x5904;&#x7406;&#xFF0C;&#x90A3;&#x4E48;&#x4F1A;&#x5728;while&#x5FAA;&#x73AF;&#x4E2D;&#x4F9D;&#x6B21;&#x5C06;&#x961F;&#x9996;&#x4EFB;&#x52A1;&#x5F39;&#x51FA;&#x961F;&#x5217;&#x5E76;&#x6267;&#x884C;&#xFF1B;</li>
 <li>&#x5982;&#x679C;&#x662F;&#x5E76;&#x884C;&#x5904;&#x7406;&#xFF0C;&#x540C;&#x6837;&#x4F1A;&#x4F9D;&#x6B21;&#x5C06;&#x4EFB;&#x52A1;&#x51FA;&#x961F;&#x5217;&#xFF0C;&#x8FDB;&#x884C;&#x8F6C;&#x53D1;&#x5230;&#x5176;&#x5B83;&#x7EBF;&#x7A0B;&#x6267;&#x884C;&#xFF1B;</li>
 <li>&#x5982;&#x679C;&#x662F;&#x4E00;&#x4E2A;barrier&#x4EFB;&#x52A1;&#xFF0C;&#x540C;&#x65F6;&#x4E0D;&#x5728; <strong><em>DISPATCH_QUEUE_IN_BARRIER</em></strong> &#x72B6;&#x6001;&#x4E2D;&#xFF0C;&#x90A3;&#x4E48;&#x4F1A;&#x63A8;&#x51FA;&#x6267;&#x884C;&#xFF0C;&#x5C06;&#x4EFB;&#x52A1;&#x8FD4;&#x56DE;&#x7ED9; <strong><em>_dispatch_queue_class_invoke</em></strong>&#xFF0C;&#x6700;&#x540E;&#x4F1A;&#x8C03;&#x7528; <strong><em> _dispatch_queue_drain_deferred_invoke</em></strong> &#x65B9;&#x6CD5;&#x5C06;&#x8FD9;&#x4E2A;&#x4EFB;&#x52A1;&#x63A8;&#x8FDF;&#x3002;</li>
-<li>&#x5982;&#x679C;&#x662F;&#x4E00;&#x4E2A;barrier&#x4EFB;&#x52A1;&#xFF0C;&#x540C;&#x65F6;&#x5728; <strong><em>DISPATCH_QUEUE_IN_BARRIER</em></strong> &#x72B6;&#x6001;&#x4E2D;&#xFF0C;&#x5C06;&#x4F1A;&#x76F4;&#x63A5;&#x6267;&#x884C;&#x8FD9;&#x4E2A;barrier&#x4EFB;&#x52A1;&#x3002;</li>
+<li>&#x5982;&#x679C;&#x662F;&#x4E00;&#x4E2A;barrier&#x4EFB;&#x52A1;&#xFF0C;&#x540C;&#x65F6;&#x5728; <strong><em>DISPATCH_QUEUE_IN_BARRIER</em></strong> &#x72B6;&#x6001;&#x4E2D;&#xFF0C;&#x90A3;&#x4E48;&#x8FD9;&#x4E2A;&#x5C31;&#x662F;&#x8981;&#x7B49;&#x5F85;&#x7684;barrier&#x4EFB;&#x52A1;&#xFF0C;&#x5C06;&#x4F1A;&#x76F4;&#x63A5;&#x6267;&#x884C;&#x3002;</li>
 <li>&#x8FD9;&#x91CC;&#x5199;&#x7684;&#x4E0D;&#x662F;&#x5F88;&#x6E05;&#x6670;&#x660E;&#x4E86;&#xFF0C;&#x56E0;&#x4E3A;&#x8FD9;&#x91CC;&#x9762;&#x7684;&#x5404;&#x79CD;&#x72B6;&#x6001;&#x548C;&#x6807;&#x8BB0;&#x4F4D;&#x6709;&#x70B9;&#x7ED5;&#x6655;&#x4E86;&#xFF0C;<strong><em>&#x7B49;&#x5927;&#x795E;&#x6307;&#x70B9;</em></strong>&#x3002;</li>
 </ul>
 </li>
 </ul>
 <hr>
-<p>&#x672A;&#x5B8C;&#xFF0C;&#x660E;&#x5929;&#x7EE7;&#x7EED;&#x2026;</p>
+<h1 id="&#x6700;&#x540E;"><a href="#&#x6700;&#x540E;" class="headerlink" title="&#x6700;&#x540E;"></a>&#x6700;&#x540E;</h1><p>&#x5C31;&#x9171;&#xFF0C;&#x5927;&#x6982;&#x77E5;&#x9053;&#x4E86;dispatch&#x7684;&#x51B0;&#x5C71;&#x4E00;&#x89D2;&#xFF0C;libdispatch&#x91CC;&#x8FD8;&#x6709;&#x5F88;&#x591A;&#x5F88;&#x591A;&#x4E1C;&#x897F;&#xFF0C;&#x6BD4;&#x5982; <strong><em>semaphore, timer, group</em></strong>&#xFF0C;&#x8FD9;&#x6B21;&#x5148;&#x6316;&#x8FD9;&#x4E48;&#x591A;&#x3002;</p>
+<p>&#x53E6;&#x5916;&#xFF0C;&#x53D1;&#x73B0;&#x5728;&#x5168;&#x5C40;&#x7684;queue&#x91CC;&#x9762;&#x6709;&#x4E00;&#x4E2A;&#x53EB; <strong><em>&#x201C;runloop-queue&#x201D;</em></strong> &#x7684;&#x961F;&#x5217;&#xFF0C;&#x8FD9;&#x4E2A;&#x5E94;&#x8BE5;&#x5C31;&#x662F;&#x5F80;runloop&#x4E2D;&#x63D0;&#x4EA4;&#x4EFB;&#x52A1;&#x7684;&#x961F;&#x5217;&#xFF0C;&#x66F4;&#x5177; <strong><em>runloop</em></strong> &#x7684;&#x6E90;&#x7801;&#xFF0C;&#x5FAA;&#x73AF;&#x4E2D;&#x4F1A;&#x8BE2;&#x95EE;dispatch&#x662F;&#x5426;&#x6709;&#x4EFB;&#x52A1;&#x63D2;&#x5165;&#x6267;&#x884C;&#xFF0C;&#x5E94;&#x8BE5;&#x5C31;&#x662F;&#x68C0;&#x67E5;&#x8FD9;&#x4E2A;&#x961F;&#x5217;&#x3002;</p>
 
                         
                     </div>
@@ -327,7 +328,7 @@
 
                 <div class="ui sticky article-toc" id="article-toc">
                     <!-- toc -->
-                    <ol class="ui ordered list"><li><a href="#全景结构图"><span>全景结构图</span></a></li><li><a href="#关键数据结构"><span>关键数据结构</span></a><ol><li><a href="#dispatch-continuation-s"><span>dispatch_continuation_s</span></a></li><li><a href="#dispatch-queue-s"><span>dispatch_queue_s</span></a></li></ol></li><li><a href="#dispatch系列常用的方法"><span>dispatch系列常用的方法</span></a><ol><li><a href="#dispatch-queue-create"><span>dispatch_queue_create</span></a></li><li><a href="#dispatch-sync"><span>dispatch_sync</span></a></li><li><a href="#dispatch-barrier-sync"><span>dispatch_barrier_sync</span></a></li><li><a href="#dispatch-async"><span>dispatch_async</span></a></li><li><a href="#dispatch-barrier-async"><span>dispatch_barrier_async</span></a></li><li><a href="#do-weakup"><span>do_weakup</span></a></li><li><a href="#do-invoke"><span>do_invoke</span></a></li></ol></li></ol>
+                    <ol class="ui ordered list"><li><a href="#全景结构图"><span>全景结构图</span></a></li><li><a href="#关键数据结构"><span>关键数据结构</span></a><ol><li><a href="#dispatch-continuation-s"><span>dispatch_continuation_s</span></a></li><li><a href="#dispatch-queue-s"><span>dispatch_queue_s</span></a></li></ol></li><li><a href="#dispatch系列常用的方法"><span>dispatch系列常用的方法</span></a><ol><li><a href="#dispatch-queue-create"><span>dispatch_queue_create</span></a></li><li><a href="#dispatch-sync"><span>dispatch_sync</span></a></li><li><a href="#dispatch-barrier-sync"><span>dispatch_barrier_sync</span></a></li><li><a href="#dispatch-async"><span>dispatch_async</span></a></li><li><a href="#dispatch-barrier-async"><span>dispatch_barrier_async</span></a></li><li><a href="#do-weakup"><span>do_weakup</span></a></li><li><a href="#do-invoke"><span>do_invoke</span></a></li></ol></li><li><a href="#最后"><span>最后</span></a></li></ol>
                 </div>
 
             </div>
