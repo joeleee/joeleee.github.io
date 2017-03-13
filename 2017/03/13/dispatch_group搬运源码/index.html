@@ -1,0 +1,419 @@
+
+
+<!DOCTYPE html>
+<html lang="null">
+<head prefix="og: http://ogp.me/ns#">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <meta name="description" content="null">
+    <title>dispatch_group搬运源码 | Joe&#39;s Doc</title>
+
+    <!-- Open Graph -->
+    <meta name="description" content="&amp;#x4E4B;&amp;#x524D;&amp;#x8FD9;&amp;#x7BC7;&amp;#x6587;&amp;#x7AE0;dispatch_semaphore&amp;#x642C;&amp;#x8FD0;&amp;#x6E90;&amp;#x7801;&amp;#x642C;&amp;#x4E86;dispatch_semaphore&amp;#x76F8;&amp;#x5173;&amp;#x7684;&amp;#x65B9;&amp;#x6CD5;&amp;#xFF0C;&amp;#x540E;&amp;#x6765;&amp;#x5">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dispatch_group搬运源码">
+<meta property="og:url" content="http://yoursite.com/2017/03/13/dispatch_group搬运源码/index.html">
+<meta property="og:site_name" content="Joe's Doc">
+<meta property="og:description" content="&amp;#x4E4B;&amp;#x524D;&amp;#x8FD9;&amp;#x7BC7;&amp;#x6587;&amp;#x7AE0;dispatch_semaphore&amp;#x642C;&amp;#x8FD0;&amp;#x6E90;&amp;#x7801;&amp;#x642C;&amp;#x4E86;dispatch_semaphore&amp;#x76F8;&amp;#x5173;&amp;#x7684;&amp;#x65B9;&amp;#x6CD5;&amp;#xFF0C;&amp;#x540E;&amp;#x6765;&amp;#x5">
+<meta property="og:updated_time" content="2017-03-13T08:12:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="dispatch_group搬运源码">
+<meta name="twitter:description" content="&amp;#x4E4B;&amp;#x524D;&amp;#x8FD9;&amp;#x7BC7;&amp;#x6587;&amp;#x7AE0;dispatch_semaphore&amp;#x642C;&amp;#x8FD0;&amp;#x6E90;&amp;#x7801;&amp;#x642C;&amp;#x4E86;dispatch_semaphore&amp;#x76F8;&amp;#x5173;&amp;#x7684;&amp;#x65B9;&amp;#x6CD5;&amp;#xFF0C;&amp;#x540E;&amp;#x6765;&amp;#x5">
+
+    <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Person",
+  "email": "mailto:undefined",
+  "image": "undefined",
+  "name": "Joe Lee",
+  "url": "http://yoursite.com"
+}
+</script>
+    <script>
+    var algoliaEnabled = false;
+    
+</script>
+
+    
+
+    
+    
+        <link href="https://fonts.gmirror.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+    
+    
+    
+        <!-- stylesheets list from config.yml -->
+        
+        <link rel="stylesheet" href="/css/aloha.css">
+        
+        <link rel="stylesheet" href="//cdn.bootcss.com/semantic-ui/2.2.4/semantic.min.css">
+        
+        <link rel="stylesheet" href="//cdn.bootcss.com/magnific-popup.js/1.1.0/magnific-popup.min.css">
+        
+    
+
+</head>
+<body id="body" style="margin-bottom: 0;" class="pushable">
+
+    <div class="ui top fixed menu">
+        <a class="item" id="menu-icon"><i class="sidebar icon"></i></a>
+    </div>
+
+    <div id="menu-sidebar" class="ui left vertical sidebar menu">
+
+    <div id="sidebar-top">
+        <div class="content">
+            <h3>Joe&#39;s Doc</h3>
+        </div>
+    </div>
+    <div class="ui container sidebar-card">
+    <div class="ui people shape content">
+        <div class="active side">
+            <div class="ui card">
+                <div class="image">
+                    <img class="ui medium bordered image" src="/images/me.jpg">
+                </div>
+                <div class="content">
+                    <a class="header">Joe Lee</a>
+                    
+                        <div class="meta">
+                            Developer/iOS/Basketball
+                        </div>
+                    
+                </div>
+                <div class="extra content">
+                    <div class="ui list">
+                        
+                        <div class="item">
+                            <i class="marker icon" style="float: left"></i>
+                            <div class="content">Beijing</div>
+                        </div>
+                        
+                        
+                        <div class="item">
+                            <i class="mail icon" style="float: left"></i>
+                            <div class="content">
+                                <a href="mailto:zhuocheng.lee@gmail.com">zhuocheng.lee@gmail.com</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                </div>
+                <div class="extra content">
+                    <div class="ui list">
+                        
+
+                                <a href="https://github.com/joeleee"><i class="large github icon" style="float: left"></i></a>
+
+                            
+
+                                <a href="http://weibo.com/209093838?is_all=1"><i class="large weibo icon" style="float: left"></i></a>
+
+                            
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+    
+    
+
+    
+
+    
+    <a href="/index.html" class="item" >
+        <i class="home icon"></i>
+        Home
+    </a>
+
+    
+
+    
+</div>
+
+    <div class="pusher body-content">
+        <div id="content" class="ui main container">
+            <!--<div class="ui one column grid">-->
+                <!--<div class="column">-->
+                    <!--<div class="ui main container">-->
+                        <div id="post-dispatch_group搬运源码" class="ui main container article-type-post">
+
+    
+
+    <div class="ui divided grid">
+
+        <div class="two column row" id="article-content">
+
+            <div class="thirteen wide computer thirteen wide tablet sixteen wide mobile column">
+                
+
+<h1 class="ui header">
+    
+    dispatch_group搬运源码
+</h1>
+
+
+
+                <div class="article-inner">
+
+                    <div class="article-entry" itemprop="articleBody">
+                        
+                        <p>&#x4E4B;&#x524D;&#x8FD9;&#x7BC7;&#x6587;&#x7AE0;<a href="http://joeleee.github.io/2017/03/13/dispatch_semaphore%E6%90%AC%E8%BF%90%E6%BA%90%E7%A0%81/" target="_blank" rel="external">dispatch_semaphore&#x642C;&#x8FD0;&#x6E90;&#x7801;</a>&#x642C;&#x4E86;dispatch_semaphore&#x76F8;&#x5173;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x540E;&#x6765;&#x53C8;&#x770B;&#x4E86;&#x770B;group&#x76F8;&#x5173;&#x7684;&#xFF0C;semaphore&#x548C;group&#x7684;&#x6E90;&#x7801;&#x5927;&#x591A;&#x90FD;&#x5728;&#x540C;&#x4E00;&#x4E2A;&#x6587;&#x4EF6;&#xFF0C;&#x6240;&#x4EE5;&#x5904;&#x7406;&#x903B;&#x8F91;&#x4E5F;&#x6709;&#x5F88;&#x591A;&#x76F8;&#x4F3C;&#x7684;&#x5730;&#x65B9;&#x3002;</p>
+<hr>
+<h1 id="dispatch-group-t&#x7684;&#x7ED3;&#x6784;"><a href="#dispatch-group-t&#x7684;&#x7ED3;&#x6784;" class="headerlink" title="dispatch_group_t&#x7684;&#x7ED3;&#x6784;"></a>dispatch_group_t&#x7684;&#x7ED3;&#x6784;</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> dispatch_group_s {</div><div class="line">    <span class="comment">// &#x5F15;&#x7528;&#x8BA1;&#x6570;&#x4E4B;&#x7C7B;&#x7684;&#x57FA;&#x7840;&#x53D8;&#x91CF;</span></div><div class="line">    OS_OBJECT_STRUCT_HEADER(dispatch_group);</div><div class="line">    <span class="comment">// dispatch&#x57FA;&#x7840;&#x7C7B;&#x7684;&#x5171;&#x6709;&#x53D8;&#x91CF;</span></div><div class="line">    <span class="keyword">struct</span> dispatch_group_s *<span class="keyword">volatile</span> do_next;</div><div class="line">    <span class="keyword">struct</span> dispatch_queue_s *do_targetq;</div><div class="line">    <span class="keyword">void</span> *do_ctxt;</div><div class="line">    <span class="keyword">void</span> *do_finalizer;</div><div class="line">    <span class="comment">// group&#x81EA;&#x6709;&#x53D8;&#x91CF;</span></div><div class="line">    <span class="keyword">long</span> <span class="keyword">volatile</span> dg_value; <span class="comment">// &#x6B63;&#x5728;&#x6267;&#x884C;&#x7684;&#x4EFB;&#x52A1;&#x6570;&#x91CF;</span></div><div class="line">    <span class="keyword">struct</span> dispatch_continuation_s *<span class="keyword">volatile</span> dg_notify_head;</div><div class="line">    <span class="keyword">struct</span> dispatch_continuation_s *<span class="keyword">volatile</span> dg_notify_tail;</div><div class="line">    <span class="keyword">sem_t</span> dg_sem;</div><div class="line">};</div></pre></td></tr></table></figure>
+<p>&#x5173;&#x952E;&#x7684;&#x6709;&#x4E09;&#x4E2A;&#x53D8;&#x91CF;&#xFF0C;<strong><em>dg_value</em></strong>&#x3001;<strong><em>dg_notify_head</em></strong>&#x3001;<strong><em>dg_notify_tail</em></strong>&#xFF1B;</p>
+<ul class="ui list">
+<li><strong><em>dg_value</em></strong> &#x662F;&#x5F53;&#x524D;&#x6B63;&#x5728;&#x6267;&#x884C;&#x7684;&#x4EFB;&#x52A1;&#x6570;&#x91CF;</li>
+<li><strong><em>dg_notify_head</em></strong> &#x662F;&#x6392;&#x961F;&#x7B49;&#x5F85;notify&#x7684;&#x961F;&#x9996;</li>
+<li><strong><em>dg_notify_tail</em></strong> &#x662F;&#x6392;&#x961F;&#x7B49;&#x5F85;notify&#x7684;&#x961F;&#x5C3E;</li>
+</ul>
+<hr>
+<h1 id="dispatch-group-create"><a href="#dispatch-group-create" class="headerlink" title="dispatch_group_create"></a>dispatch_group_create</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">dispatch_group_t</span> dispatch_group_create(<span class="keyword">void</span>) {</div><div class="line">    <span class="keyword">return</span> _dispatch_group_create_with_count(<span class="number">0</span>);</div><div class="line">    <span class="keyword">dispatch_group_t</span> dg = (<span class="keyword">dispatch_group_t</span>)_dispatch_alloc(DISPATCH_VTABLE(group), <span class="keyword">sizeof</span>(<span class="keyword">struct</span> dispatch_group_s));</div><div class="line"></div><div class="line">    dg-&gt;do_next = DISPATCH_OBJECT_LISTLESS;</div><div class="line">    dg-&gt;do_targetq = _dispatch_get_root_queue(_DISPATCH_QOS_CLASS_DEFAULT, <span class="literal">false</span>);</div><div class="line">    dg-&gt;dsema_value = value;</div><div class="line">    <span class="keyword">int</span> ret = sem_init(&amp;dg-&gt;dsema_sem, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">    DISPATCH_SEMAPHORE_VERIFY_RET(ret);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> dg;</div><div class="line">}</div></pre></td></tr></table></figure>
+<p>&#x4E3B;&#x8981;&#x662F;&#x7ED9; <strong><em>dsema_value</em></strong> &#x8D4B;&#x503C;&#x3002;</p>
+<hr>
+<h1 id="dispatch-group-async"><a href="#dispatch-group-async" class="headerlink" title="dispatch_group_async"></a>dispatch_group_async</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">dispatch_group_async</span><span class="params">(<span class="keyword">dispatch_group_t</span> dg, <span class="keyword">dispatch_queue_t</span> dq, <span class="keyword">dispatch_block_t</span> db)</span> </span>{</div><div class="line">    <span class="comment">// &#x521B;&#x5EFA;&#x4EFB;&#x52A1;&#x5BF9;&#x8C61;</span></div><div class="line">    <span class="keyword">dispatch_continuation_t</span> dc = _dispatch_continuation_alloc();</div><div class="line">    dc-&gt;dc_flags = DISPATCH_OBJ_CONSUME_BIT | DISPATCH_OBJ_GROUP_BIT | DISPATCH_OBJ_BLOCK_BIT;</div><div class="line">    dc-&gt;dc_ctxt = _dispatch_Block_copy(db);</div><div class="line">    dc-&gt;dc_func = _dispatch_call_block_and_release;</div><div class="line"></div><div class="line">    dispatch_group_enter(dg);</div><div class="line">    dc-&gt;dc_data = dg;</div><div class="line"></div><div class="line">    <span class="comment">// &#x4E0B;&#x9762;&#x7684;&#x64CD;&#x4F5C;&#x90FD;&#x548C; dispatch_async &#x76F8;&#x540C;</span></div><div class="line">    <span class="comment">// &#x627E;&#x5230;&#x8F6C;&#x53D1;&#x7684;queue</span></div><div class="line">    dq = dq-&gt;do_targetq;</div><div class="line">    <span class="keyword">while</span> (slowpath(DISPATCH_QUEUE_USES_REDIRECTION(dq-&gt;dq_width))) {</div><div class="line">        <span class="keyword">if</span> (!_dispatch_queue_try_acquire_async(dq)) <span class="keyword">break</span>;</div><div class="line">        dq = dq-&gt;do_targetq;</div><div class="line">    }</div><div class="line">    <span class="comment">// &#x66F4;&#x65B0;&#x961F;&#x5217;&#x5C3E;&#x90E8;&#xFF0C;&#x548C;dispatch_barrier_async&#x76F8;&#x540C;-&gt;_dispatch_continuation_push(dq, dc);</span></div><div class="line">    <span class="keyword">if</span> (_dispatch_queue_push_update_tail(dq, dc)) { <span class="comment">// &#x5982;&#x679C;&#x961F;&#x5217;&#x4E3A;&#x7A7A;&#xFF0C;&#x4F1A;return ture</span></div><div class="line">        <span class="comment">// &#x5982;&#x679C;&#x961F;&#x5217;&#x4E3A;&#x7A7A;&#xFF0C;&#x90A3;&#x4E48;&#x66F4;&#x65B0;&#x961F;&#x5C3E;&#x540E;&#x961F;&#x5217;&#x5934;&#x90E8;&#x4E5F;&#x8981;&#x66F4;&#x65B0;&#x4E00;&#x4E0B;</span></div><div class="line">        _dispatch_queue_push_update_head(dq, tail, <span class="literal">true</span>);</div><div class="line">        <span class="keyword">dispatch_wakeup_flags_t</span> flags = DISPATCH_WAKEUP_CONSUME | DISPATCH_WAKEUP_FLUSH;</div><div class="line">        <span class="comment">// dx_wakeup &#x4F1A;&#x8C03;&#x7528;&#x961F;&#x5217;&#x7684;_dispatch_queue_wakeup&#x51FD;&#x6570;&#x6307;&#x9488;&#xFF0C;&#x6BCF;&#x4E2A;&#x961F;&#x5217;&#x6709;&#x81EA;&#x5DF1;&#x4E0D;&#x540C;&#x7684;&#x5904;&#x7406;&#xFF0C;&#x89C1;do_weakeup.c</span></div><div class="line">        (&amp;dq-&gt;do_vtable-&gt;_os_obj_vtable)-&gt;dx_wakeup(dq, pp, <span class="number">0</span>)</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+<p>&#x5C31;&#x662F;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x4EFB;&#x52A1;&#xFF0C;&#x8C03;&#x7528; <strong><em>dispatch_group_enter(dg)</em></strong> &#x5728; <strong><em>group</em></strong> &#x4E2D;&#x6807;&#x8BB0;&#x6709;&#x4E00;&#x4E2A;&#x6B63;&#x5728;&#x6267;&#x884C;&#x7684;&#x4EFB;&#x52A1;&#xFF0C;&#x7136;&#x540E;&#x5C06; <strong><em>group</em></strong> &#x8D4B;&#x503C;&#x5230;&#x4EFB;&#x52A1;&#x7684; <strong><em>dc-&gt;dc_data</em></strong> &#x4E2D;&#x3002;&#x6700;&#x540E;&#x7684;&#x6267;&#x884C;&#x548C; <strong><em>dispatch_async</em></strong> &#x4E00;&#x6837;&#x3002;</p>
+<p>&#x4E0D;&#x540C;&#x7684;&#x662F;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x5728; <strong><em>dispatch_group_async</em></strong> &#x4E2D;&#x88AB;&#x521B;&#x5EFA;&#x7684;&#x4EFB;&#x52A1;&#x6DFB;&#x52A0;&#x4E86; <strong><em>DISPATCH_OBJ_GROUP_BIT</em></strong> &#x7684;&#x6807;&#x8BB0;&#x3002;&#x6709;&#x4E86;&#x8FD9;&#x4E2A;&#x6807;&#x8BB0;&#x540E;&#xFF0C;&#x4EFB;&#x52A1;&#x5728; <strong><em>dispatch_async</em></strong> &#x6267;&#x884C;&#x65F6;&#x7684;&#x4E0D;&#x540C;&#x5982;&#x4E0B;&#xFF1A;</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// &#x5BF9;&#x4E8E;&#x6807;&#x8BB0;&#x6709; DISPATCH_OBJ_GROUP_BIT &#x7684;&#x4EFB;&#x52A1;&#xFF0C;&#x5728;&#x6267;&#x884C;&#x7684;invoke&#x65B9;&#x6CD5;&#x4E2D;&#x4F1A;&#x7A0D;&#x6709;&#x4E0D;&#x540C;</span></div><div class="line"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> _dispatch_continuation_invoke_inline(<span class="keyword">dispatch_object_t</span> dou, <span class="keyword">voucher_t</span> ov, <span class="keyword">dispatch_invoke_flags_t</span> flags) {</div><div class="line">    <span class="keyword">dispatch_continuation_t</span> dc = dou._dc, dc1;</div><div class="line">    dispatch_invoke_with_autoreleasepool(flags, {</div><div class="line">        <span class="comment">// &#x5148;&#x5C06;&#x4EFB;&#x52A1;&#x52A0;&#x5165;&#x7F13;&#x5B58;&#xFF0C;&#x8FD9;&#x6837;&#x5728;&#x56DE;&#x8C03;&#x7684;&#x7684;&#x65F6;&#x5019;&#x6548;&#x7387;&#x4F1A;&#x66F4;&#x9AD8;</span></div><div class="line">        dc1 = _dispatch_continuation_free_cacheonly(dc);</div><div class="line">        <span class="comment">// group&#x7684;&#x60C5;&#x51B5;</span></div><div class="line">        <span class="keyword">if</span> (dc-&gt;dc_flags &amp; DISPATCH_OBJ_GROUP_BIT) {</div><div class="line">            _dispatch_client_callout(dc-&gt;dc_ctxt, dc-&gt;dc_func);</div><div class="line">            _dispatch_introspection_queue_item_complete(dc-&gt;dc_data);</div><div class="line">            dispatch_group_leave((<span class="keyword">dispatch_group_t</span>)dc-&gt;dc_data);</div><div class="line">        } <span class="keyword">else</span> {</div><div class="line">            <span class="comment">// ...</span></div><div class="line">            <span class="comment">/* &#x5176;&#x5B83;&#x60C5;&#x51B5; */</span></div><div class="line">            <span class="comment">// ...</span></div><div class="line">        }</div><div class="line">        <span class="comment">// &#x6E05;&#x9664;&#x7F13;&#x5B58;</span></div><div class="line">        _dispatch_continuation_free_to_cache_limit(dc1);</div><div class="line">    });</div><div class="line">}</div></pre></td></tr></table></figure>
+<p>&#x53EF;&#x4EE5;&#x53D1;&#x73B0;&#x6700;&#x5927;&#x7684;&#x4E0D;&#x540C;&#x5728; <strong><em>if (dc-&gt;dc_flags &amp; DISPATCH_OBJ_GROUP_BIT)</em></strong> &#x6761;&#x4EF6;&#x4E2D;&#xFF0C;&#x5728;&#x6267;&#x884C;&#x5B8C; <strong><em>async</em></strong> &#x4EFB;&#x52A1;&#x540E;&#xFF0C;&#x4F1A;&#x8C03;&#x7528;&#x4E00;&#x4E0B; <strong><em>dispatch_group_leave</em></strong> &#x5728; <strong><em>group</em></strong> &#x4E2D;&#x6807;&#x8BB0;&#x6709;&#x4E00;&#x4E2A;&#x4EFB;&#x52A1;&#x5B8C;&#x6210;&#x4E86;&#x3002;</p>
+<hr>
+<h1 id="dispatch-group-notify"><a href="#dispatch-group-notify" class="headerlink" title="dispatch_group_notify"></a>dispatch_group_notify</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">dispatch_group_notify</span><span class="params">(<span class="keyword">dispatch_group_t</span> dg, <span class="keyword">dispatch_queue_t</span> dq, <span class="keyword">dispatch_block_t</span> db)</span> </span>{</div><div class="line">    <span class="comment">// &#x521B;&#x5EFA;&#x4EFB;&#x52A1;&#x5BF9;&#x8C61;</span></div><div class="line">    <span class="keyword">dispatch_continuation_t</span> dsn = _dispatch_continuation_alloc();</div><div class="line">    dsn-&gt;dc_flags = DISPATCH_OBJ_CONSUME_BIT;</div><div class="line">    dsn-&gt;dc_ctxt = _dispatch_Block_copy(db);</div><div class="line"></div><div class="line">    <span class="comment">// &#x66F4;&#x65B0;&#x4E00;&#x4E0B; dg &#x7684; dg_notify_tail &#x5217;&#x8868;&#x548C; dg_notify_head &#x5217;&#x8868;</span></div><div class="line">    _dispatch_group_notify(dg, dq, dsn);</div><div class="line">}</div></pre></td></tr></table></figure>
+<p>&#x5728;&#x7B49;&#x5F85;&#x5217;&#x8868;&#x4E2D;&#x6DFB;&#x52A0;&#x4E00;&#x4E2A;&#x9700;&#x8981;&#x88AB;&#x901A;&#x77E5;&#x7684;&#x4EFB;&#x52A1;&#xFF0C;&#x66F4;&#x65B0;&#x4E00;&#x4E0B; <strong><em>dg_notify_tail</em></strong> &#x961F;&#x5C3E;&#xFF0C;&#x540C;&#x65F6;&#x5982;&#x679C;&#x6709;&#x5FC5;&#x8981;&#xFF0C;&#x8FD8;&#x4F1A;&#x518D;&#x66F4;&#x65B0;&#x4E00;&#x4E0B;&#x961F;&#x9996; <strong><em>dg_notify_head</em></strong>&#x3002;</p>
+<hr>
+<h1 id="dispatch-group-enter-amp-dispatch-group-leave"><a href="#dispatch-group-enter-amp-dispatch-group-leave" class="headerlink" title="dispatch_group_enter &amp; dispatch_group_leave"></a>dispatch_group_enter &amp; dispatch_group_leave</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">dispatch_group_enter</span><span class="params">(<span class="keyword">dispatch_group_t</span> dg)</span> </span>{</div><div class="line">    <span class="comment">// &#x5BF9; dg_value &#x8FDB;&#x884C;&#x81EA;&#x589E;&#x5C31;OK&#x4E86;</span></div><div class="line">    <span class="keyword">long</span> value = os_atomic_inc_orig2o(dg, dg_value, acquire);</div><div class="line">}</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">dispatch_group_leave</span><span class="params">(<span class="keyword">dispatch_group_t</span> dg)</span> </span>{</div><div class="line">    <span class="comment">// &#x5BF9; dg_value &#x8FDB;&#x884C;&#x81EA;&#x51CF;</span></div><div class="line">    <span class="keyword">long</span> value = os_atomic_dec2o(dg, dg_value, release);</div><div class="line"></div><div class="line">    <span class="comment">// &#x5982;&#x679C;&#x51CF;&#x5230;0&#x4E86;&#xFF0C;&#x9700;&#x8981;&#x5524;&#x9192;&#x548C;&#x6267;&#x884C;&#x4E86;</span></div><div class="line">    <span class="keyword">if</span> (value == <span class="number">0</span>) {</div><div class="line">        <span class="comment">// &#x5524;&#x9192;&#x6240;&#x6709;&#x7528;dispatch_group_wait&#x540C;&#x6B65;&#x7B49;&#x5F85;&#x7684;&#x5730;&#x65B9;</span></div><div class="line">        <span class="keyword">long</span> rval = (<span class="keyword">long</span>)os_atomic_xchg2o(dg, dg_waiters, <span class="number">0</span>, relaxed);</div><div class="line">        <span class="keyword">do</span> {</div><div class="line">            <span class="keyword">int</span> ret = sem_post(&amp;dg-&gt;dg_sem);</div><div class="line">            DISPATCH_SEMAPHORE_VERIFY_RET(ret);</div><div class="line">        } <span class="keyword">while</span> (--rval);</div><div class="line"></div><div class="line">        <span class="comment">// &#x6267;&#x884C;&#x6240;&#x6709;notify&#x5217;&#x8868;&#x91CC;&#x7B49;&#x5F85;&#x7684;&#x4EFB;&#x52A1;</span></div><div class="line">        <span class="keyword">dispatch_continuation_t</span> next, head, tail = <span class="literal">NULL</span>;</div><div class="line">        head = os_atomic_xchg2o(dg, dg_notify_head, <span class="literal">NULL</span>, relaxed);</div><div class="line">        tail = os_atomic_xchg2o(dg, dg_notify_tail, <span class="literal">NULL</span>, release);</div><div class="line">        <span class="keyword">do</span> {</div><div class="line">            next = os_mpsc_pop_snapshot_head(head, tail, do_next);</div><div class="line">            <span class="keyword">dispatch_queue_t</span> dsn_queue = (<span class="keyword">dispatch_queue_t</span>)head-&gt;dc_data;</div><div class="line">            <span class="comment">// &#x5E76;&#x53D1;&#x6267;&#x884C;notify&#x5217;&#x8868;&#x4E2D;&#x7B49;&#x5F85;&#x7684;&#x4EFB;&#x52A1;, &#x548C; dispatch_async &#x4E00;&#x6837;</span></div><div class="line">            _dispatch_continuation_async(dsn_queue, head);</div><div class="line">            _dispatch_release(dsn_queue);</div><div class="line">        } <span class="keyword">while</span> ((head = next));</div><div class="line">        _dispatch_release(dg);</div><div class="line">    }</div><div class="line">}</div></pre></td></tr></table></figure>
+<p><strong><em>dispatch_group_enter</em></strong> &#x65B9;&#x6CD5;&#x5BF9; <strong><em>dg_value</em></strong> &#x8FDB;&#x884C;&#x4E86;&#x52A0;1&#x64CD;&#x4F5C;&#x3002;</p>
+<p>&#x5BF9;&#x5E94;&#x7684; <strong><em>dispatch_group_leave</em></strong> &#x65B9;&#x6CD5;&#x4F1A;&#x5BF9; <strong><em>dg_value</em></strong> &#x8FDB;&#x884C;&#x51CF;1&#x64CD;&#x4F5C;&#x3002;</p>
+<p>&#x51CF;1&#x4E4B;&#x540E;&#x5982;&#x679C;&#x53D1;&#x73B0; <strong><em>group</em></strong> &#x4E2D;&#x6CA1;&#x6709;&#x6B63;&#x5728;&#x6267;&#x884C;&#x7684;&#x4EFB;&#x52A1;&#x4E86;&#xFF0C;&#x65E2; <strong><em>dg_value</em></strong> &#x4E3A;0&#x4E86;&#xFF0C;&#x90A3;&#x4E48;&#x5C31;&#x53BB;&#x5524;&#x9192; <strong><em>dispatch_group_wait</em></strong> &#x7B49;&#x5F85;&#x7684;&#x5730;&#x65B9;&#xFF0C;&#x540C;&#x65F6;&#x6267;&#x884C;&#x9700;&#x8981;notify&#x7684;&#x4EFB;&#x52A1;&#x3002;</p>
+<hr>
+<h1 id="dispatch-group-wait"><a href="#dispatch-group-wait" class="headerlink" title="dispatch_group_wait"></a>dispatch_group_wait</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">long</span> <span class="title">dispatch_group_wait</span><span class="params">(<span class="keyword">dispatch_group_t</span> dg, <span class="keyword">dispatch_time_t</span> timeout)</span> </span>{</div><div class="line">    <span class="keyword">if</span> (dg-&gt;dg_value == <span class="number">0</span>) {</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    }</div><div class="line">    <span class="keyword">if</span> (timeout == <span class="number">0</span>) {</div><div class="line">        errno = ETIMEDOUT;</div><div class="line">        <span class="keyword">return</span> (<span class="number">-1</span>);</div><div class="line">    }</div><div class="line">    <span class="comment">// &#x5F00;&#x59CB;&#x7B49;&#x5F85;&#xFF0C;&#x8D85;&#x65F6;&#x4E4B;&#x524D;&#x5728;while&#x5FAA;&#x73AF;&#x4E2D;&#x4E0D;&#x505C;&#x7684;&#x68C0;&#x67E5;dg-&gt;dg_sem&#xFF0C;&#x76F4;&#x5230;&#x8D85;&#x65F6;&#x9000;&#x51FA;&#x6216;&#x5F97;&#x5230;&#x4FE1;&#x53F7;</span></div><div class="line">    <span class="keyword">return</span> _dispatch_group_wait_slow(dg, timeout);</div><div class="line">}</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// &#x8FD9;&#x4E2A;&#x65B9;&#x6CD5;&#x548C; semaphore &#x7684; wait &#x7C7B;&#x4F3C;</span></div><div class="line"><span class="keyword">static</span> <span class="keyword">long</span> _dispatch_group_wait_slow(<span class="keyword">dispatch_group_t</span> dg, <span class="keyword">dispatch_time_t</span> timeout) {</div><div class="line">    <span class="keyword">long</span> value;</div><div class="line">    <span class="keyword">int</span> orig_waiters;</div><div class="line">    <span class="keyword">struct</span> timespec _timeout;</div><div class="line">    <span class="keyword">int</span> ret;</div><div class="line"></div><div class="line">    (<span class="keyword">void</span>)os_atomic_inc2o(dg, dg_waiters, relaxed);</div><div class="line"></div><div class="line">    <span class="keyword">switch</span> (timeout) {</div><div class="line">        <span class="keyword">default</span>:</div><div class="line">            <span class="comment">// &#x7B49;&#x5230;&#x8D85;&#x65F6;</span></div><div class="line">            <span class="keyword">do</span> {</div><div class="line">                <span class="keyword">uint64_t</span> nsec = _dispatch_time_nanoseconds_since_epoch(timeout);</div><div class="line">                _timeout.tv_sec = (typeof(_timeout.tv_sec))(nsec / NSEC_PER_SEC);</div><div class="line">                _timeout.tv_nsec = (typeof(_timeout.tv_nsec))(nsec % NSEC_PER_SEC);</div><div class="line">                ret = sem_timedwait(&amp;dg-&gt;dg_sem, &amp;_timeout);</div><div class="line">            } <span class="keyword">while</span> (ret == <span class="number">-1</span> &amp;&amp; errno == EINTR);</div><div class="line">            <span class="comment">// &#x8D85;&#x65F6;&#x4E4B;&#x524D;&#x7B49;&#x5230;&#x8D44;&#x6E90;&#x4E86;</span></div><div class="line">            <span class="keyword">if</span> (!(ret == <span class="number">-1</span> &amp;&amp; errno == ETIMEDOUT)) {</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            }</div><div class="line">        <span class="keyword">case</span> DISPATCH_TIME_NOW:</div><div class="line">            orig_waiters = dg-&gt;dg_waiters;</div><div class="line">            <span class="keyword">while</span> (orig_waiters) {</div><div class="line">                <span class="comment">// &#x8D85;&#x65F6;&#x4E4B;&#x524D;&#x6CA1;&#x7B49;&#x5230;&#x8D44;&#x6E90;&#xFF0C;&#x8D85;&#x65F6;&#x8FD4;&#x56DE;</span></div><div class="line">                <span class="keyword">if</span> (os_atomic_cmpxchgvw2o(dg, dg_waiters, orig_waiters, orig_waiters - <span class="number">1</span>, &amp;orig_waiters, relaxed)) {</div><div class="line">                    errno = ETIMEDOUT;</div><div class="line">                    <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">                }</div><div class="line">            }</div><div class="line">        <span class="keyword">case</span> DISPATCH_TIME_FOREVER:</div><div class="line">            <span class="comment">// &#x4E00;&#x76F4;&#x7B49;</span></div><div class="line">            <span class="keyword">do</span> {</div><div class="line">                ret = sem_wait(&amp;dg-&gt;dg_sem);</div><div class="line">            } <span class="keyword">while</span> (ret == <span class="number">-1</span> &amp;&amp; errno == EINTR);</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">    }</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">}</div></pre></td></tr></table></figure>
+<p>&#x5982;&#x679C; <strong><em>group</em></strong> &#x4E2D;&#x5F53;&#x524D;&#x6CA1;&#x6709;&#x5728;&#x6267;&#x884C;&#x7684;&#x4EFB;&#x52A1;&#xFF0C;&#x5C31;&#x76F4;&#x63A5;&#x8FD4;&#x56DE;&#x6210;&#x529F;&#x4E86;&#xFF1B;</p>
+<p>&#x7136;&#x540E;&#x68C0;&#x67E5;&#x5982;&#x679C;&#x4E0D;&#x7B49;&#x5F85;&#xFF0C;&#x76F4;&#x63A5;&#x8FD4;&#x56DE;&#x8D85;&#x65F6;&#xFF1B;</p>
+<p>&#x5426;&#x5219;&#x8FDB;&#x5165;&#x7B49;&#x5F85;&#x6D41;&#x7A0B;&#xFF0C;&#x8FD9;&#x4E2A;&#x7B49;&#x5F85;&#x6D41;&#x7A0B;&#x548C; <a href="http://joeleee.github.io/2017/03/13/dispatch_semaphore%E6%90%AC%E8%BF%90%E6%BA%90%E7%A0%81/#dispatch-semaphore-wait" target="_blank" rel="external">dispatch_semaphore_wait</a> &#x975E;&#x5E38;&#x76F8;&#x4F3C;&#x3002;</p>
+<hr>
+<p>&#x5BF9;&#x6E90;&#x7801;&#x7684;&#x7FFB;&#x8BD1;&#x6709;&#x8BEF;&#x5E0C;&#x671B;&#x5927;&#x5BB6;&#x4F7F;&#x52B2;&#x62CD;&#x3002;</p>
+
+                        
+                    </div>
+
+                    
+                    
+                    
+
+                    <div class="description post-description">
+    <span class="post-description-item">
+        <time datetime="2017-03-13T03:47:10.000Z" itemprop="datePublished">2017-03-13</time>
+
+    </span>
+    <span class="post-description-item">
+        
+
+    <span>
+        <i class="tags icon"></i>
+    </span>
+
+    
+    <span class="ui tiny label">
+        <a href="/tags/libdispatch/">libdispatch</a>
+    </span>
+
+    
+    <span class="ui tiny label">
+        <a href="/tags/GCD/">GCD</a>
+    </span>
+
+    
+
+    </span>
+</div>
+
+                </div>
+                
+                <div id="pagination" class="nav-web ui text container pagination">
+
+    <div class="ui stackable two column divided grid container">
+        <div class="row">
+            <div class="column nav-left">
+                
+
+                <a class="ui tiny button disabled"><i class="angle left icon"></i>Previous</a>
+
+                
+            </div>
+            <div class="column nav-right">
+                
+
+                <a href="/2017/03/13/dispatch_semaphore搬运源码/" class="ui tiny button">
+                    
+                    dispatch_semaphore搬运源码
+                    
+                    <i class="angle right icon"></i></a>
+                
+            </div>
+        </div>
+    </div>
+
+</div>
+                
+            </div>
+
+            
+            <div class="three wide computer three wide tablet column">
+
+                <div class="ui sticky article-toc" id="article-toc">
+                    <!-- toc -->
+                    <ol class="ui ordered list"><li><a href="#dispatch-group-t的结构"><span>dispatch_group_t的结构</span></a></li><li><a href="#dispatch-group-create"><span>dispatch_group_create</span></a></li><li><a href="#dispatch-group-async"><span>dispatch_group_async</span></a></li><li><a href="#dispatch-group-notify"><span>dispatch_group_notify</span></a></li><li><a href="#dispatch-group-enter-amp-dispatch-group-leave"><span>dispatch_group_enter & dispatch_group_leave</span></a></li><li><a href="#dispatch-group-wait"><span>dispatch_group_wait</span></a></li></ol>
+                </div>
+
+            </div>
+            
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- css -->
+  <style type="text/css">
+      .center {
+          text-align: center;
+      }
+      .hidden {
+          display: none;
+      }
+    .donate_bar a.btn_donate{
+      display: inline-block;
+      width: 82px;
+      height: 82px;
+      background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+      _background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+      <!-- http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif
+           因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+         为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+         嵌入其它博客时不一定要它们。 -->
+      -webkit-transition: background 0s;
+      -moz-transition: background 0s;
+      -o-transition: background 0s;
+      -ms-transition: background 0s;
+      transition: background 0s;
+      <!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+    }
+    .donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+    .donate_bar .donate_txt {
+      display: block;
+      color: #9d9d9d;
+      font: 14px/2 "Microsoft Yahei";
+    }
+    .bold{ font-weight: bold; }
+  </style>
+<!-- /css -->
+<!-- Donate Module -->
+  <div id="donate_module">
+  <!-- btn_donate & tips -->
+    <div id="donate_board" class="donate_bar center">      
+    <br>
+    <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+    <span class="donate_txt">
+      我知道不会有人打赏，可是万一有人想不开呢？
+    </span>    
+    </div>
+  <!-- /btn_donate & tips -->
+  <!-- donate guide -->
+    <div id="donate_guide" class="donate_bar center hidden">
+    <br>
+      <a title="用微信扫一扫哦~" class="fancybox" rel="article0">
+        <img src="/images/wechat_small.jpg" title="微信打赏 Joe" height="190px" width="auto"/>
+      </a>&nbsp;&nbsp;
+      <!-- 暂时不需要支付宝，只用微信支付就好了
+      <a href="/images/alipay_small.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+        <img src="/images/alipay_small.jpg" title="支付宝打赏 Joe" height="190px" width="auto"/>
+      </a>
+      -->
+      <span class="donate_txt">
+        我知道不会有人打赏，可是万一有人想不开呢？
+      </span>
+    </div>
+  <!-- /donate guide -->
+<!-- donate script -->
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function() {
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+    function donate_on_web(){
+      $('#donate').submit();
+        }
+    var original_window_onload = window.onload;
+        window.onload = function () {
+            if (original_window_onload) {
+                original_window_onload();
+            }
+            //document.getElementById('donate_board_wdg').className = 'hidden';
+    }
+  </script>
+<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+
+
+
+
+<!-- duoshuo start -->
+<div class="ds-thread" data-thread-key="2017/03/13/dispatch_group搬运源码/" data-title="dispatch_group搬运源码 | Joe&#39;s Doc" data-url="http://yoursite.com/2017/03/13/dispatch_group搬运源码/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"joegithubio"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- duoshuo end -->
+
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+        <div class="ui vertical footer segment">
+    <div class="ui center aligned container">
+        <div class="ui inverted section divider"></div>
+        &copy; 2017 <a href="/">Joe Lee</a>,
+        Powered by <a href="https://github.com/henryhuang/hexo-theme-aloha" target="_blank">Aloha</a> and <a
+                href="http://hexo.io/" target="_blank">Hexo</a>.
+    </div>
+</div>
+
+    </div>
+
+
+
+
+<!-- scripts list from theme config.yml -->
+
+<script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+
+<script src="//cdn.bootcss.com/semantic-ui/2.2.4/semantic.min.js"></script>
+
+<script src="//cdn.bootcss.com/algoliasearch/3.18.1/algoliasearch.min.js"></script>
+
+<script src="//cdn.bootcss.com/algoliasearch-helper-js/2.13.0/algoliasearch.helper.min.js"></script>
+
+<script src="/js/semantic-ui-algolia.js"></script>
+
+<script src="/js/aloha-events.js"></script>
+
+
+
+</body>
+</html>
