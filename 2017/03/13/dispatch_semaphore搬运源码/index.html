@@ -1,0 +1,416 @@
+
+
+<!DOCTYPE html>
+<html lang="null">
+<head prefix="og: http://ogp.me/ns#">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <meta name="description" content="null">
+    <title>dispatch_semaphore搬运源码 | Joe&#39;s Doc</title>
+
+    <!-- Open Graph -->
+    <meta name="description" content="&amp;#x4E4B;&amp;#x524D;&amp;#x8FD9;&amp;#x7BC7;&amp;#x6587;&amp;#x7AE0;&amp;#x6252;&amp;#x4E86;&amp;#x6252;libdispatch&amp;#x6E90;&amp;#x7801;&amp;#x642C;&amp;#x8FD0;&amp;#x4E86;&amp;#x4E00;&amp;#x4E9B;libdispatch&amp;#x7684;async&amp;#x548C;sync&amp;#x5411;&amp;#x5149;&amp;#x7684;&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dispatch_semaphore搬运源码">
+<meta property="og:url" content="http://yoursite.com/2017/03/13/dispatch_semaphore搬运源码/index.html">
+<meta property="og:site_name" content="Joe's Doc">
+<meta property="og:description" content="&amp;#x4E4B;&amp;#x524D;&amp;#x8FD9;&amp;#x7BC7;&amp;#x6587;&amp;#x7AE0;&amp;#x6252;&amp;#x4E86;&amp;#x6252;libdispatch&amp;#x6E90;&amp;#x7801;&amp;#x642C;&amp;#x8FD0;&amp;#x4E86;&amp;#x4E00;&amp;#x4E9B;libdispatch&amp;#x7684;async&amp;#x548C;sync&amp;#x5411;&amp;#x5149;&amp;#x7684;&amp;">
+<meta property="og:updated_time" content="2017-03-13T03:44:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="dispatch_semaphore搬运源码">
+<meta name="twitter:description" content="&amp;#x4E4B;&amp;#x524D;&amp;#x8FD9;&amp;#x7BC7;&amp;#x6587;&amp;#x7AE0;&amp;#x6252;&amp;#x4E86;&amp;#x6252;libdispatch&amp;#x6E90;&amp;#x7801;&amp;#x642C;&amp;#x8FD0;&amp;#x4E86;&amp;#x4E00;&amp;#x4E9B;libdispatch&amp;#x7684;async&amp;#x548C;sync&amp;#x5411;&amp;#x5149;&amp;#x7684;&amp;">
+
+    <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Person",
+  "email": "mailto:undefined",
+  "image": "undefined",
+  "name": "Joe Lee",
+  "url": "http://yoursite.com"
+}
+</script>
+    <script>
+    var algoliaEnabled = false;
+    
+</script>
+
+    
+
+    
+    
+        <link href="https://fonts.gmirror.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+    
+    
+    
+        <!-- stylesheets list from config.yml -->
+        
+        <link rel="stylesheet" href="/css/aloha.css">
+        
+        <link rel="stylesheet" href="//cdn.bootcss.com/semantic-ui/2.2.4/semantic.min.css">
+        
+        <link rel="stylesheet" href="//cdn.bootcss.com/magnific-popup.js/1.1.0/magnific-popup.min.css">
+        
+    
+
+</head>
+<body id="body" style="margin-bottom: 0;" class="pushable">
+
+    <div class="ui top fixed menu">
+        <a class="item" id="menu-icon"><i class="sidebar icon"></i></a>
+    </div>
+
+    <div id="menu-sidebar" class="ui left vertical sidebar menu">
+
+    <div id="sidebar-top">
+        <div class="content">
+            <h3>Joe&#39;s Doc</h3>
+        </div>
+    </div>
+    <div class="ui container sidebar-card">
+    <div class="ui people shape content">
+        <div class="active side">
+            <div class="ui card">
+                <div class="image">
+                    <img class="ui medium bordered image" src="/images/me.jpg">
+                </div>
+                <div class="content">
+                    <a class="header">Joe Lee</a>
+                    
+                        <div class="meta">
+                            Developer/iOS/Basketball
+                        </div>
+                    
+                </div>
+                <div class="extra content">
+                    <div class="ui list">
+                        
+                        <div class="item">
+                            <i class="marker icon" style="float: left"></i>
+                            <div class="content">Beijing</div>
+                        </div>
+                        
+                        
+                        <div class="item">
+                            <i class="mail icon" style="float: left"></i>
+                            <div class="content">
+                                <a href="mailto:zhuocheng.lee@gmail.com">zhuocheng.lee@gmail.com</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                </div>
+                <div class="extra content">
+                    <div class="ui list">
+                        
+
+                                <a href="https://github.com/joeleee"><i class="large github icon" style="float: left"></i></a>
+
+                            
+
+                                <a href="http://weibo.com/209093838?is_all=1"><i class="large weibo icon" style="float: left"></i></a>
+
+                            
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+    
+    
+
+    
+
+    
+    <a href="/index.html" class="item" >
+        <i class="home icon"></i>
+        Home
+    </a>
+
+    
+
+    
+</div>
+
+    <div class="pusher body-content">
+        <div id="content" class="ui main container">
+            <!--<div class="ui one column grid">-->
+                <!--<div class="column">-->
+                    <!--<div class="ui main container">-->
+                        <div id="post-dispatch_semaphore搬运源码" class="ui main container article-type-post">
+
+    
+
+    <div class="ui divided grid">
+
+        <div class="two column row" id="article-content">
+
+            <div class="thirteen wide computer thirteen wide tablet sixteen wide mobile column">
+                
+
+<h1 class="ui header">
+    
+    dispatch_semaphore搬运源码
+</h1>
+
+
+
+                <div class="article-inner">
+
+                    <div class="article-entry" itemprop="articleBody">
+                        
+                        <p>&#x4E4B;&#x524D;&#x8FD9;&#x7BC7;&#x6587;&#x7AE0;<a href="http://joeleee.github.io/2017/02/21/%E6%89%92%E4%BA%86%E6%89%92libdispatch%E6%BA%90%E7%A0%81/" target="_blank" rel="external">&#x6252;&#x4E86;&#x6252;libdispatch&#x6E90;&#x7801;</a>&#x642C;&#x8FD0;&#x4E86;&#x4E00;&#x4E9B;libdispatch&#x7684;async&#x548C;sync&#x5411;&#x5149;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x540E;&#x6765;&#x53C8;&#x770B;&#x4E86;&#x770B;semaphore&#x76F8;&#x5173;&#x7684;&#xFF0C;&#x56E0;&#x4E3A;&#x4E1C;&#x897F;&#x4E0D;&#x591A;&#xFF0C;&#x903B;&#x8F91;&#x4E5F;&#x76F8;&#x5BF9;&#x7B80;&#x5355;&#x4E00;&#x4E9B;&#xFF0C;&#x6240;&#x4EE5;&#x53EA;&#x9760;&#x6CE8;&#x91CA;&#x5DEE;&#x4E0D;&#x591A;&#x5C31;&#x80FD;&#x89E3;&#x91CA;&#x6E05;&#x695A;&#x4E86;&#x3002;</p>
+<hr>
+<h1 id="dispatch-semaphore-t&#x7684;&#x7ED3;&#x6784;"><a href="#dispatch-semaphore-t&#x7684;&#x7ED3;&#x6784;" class="headerlink" title="dispatch_semaphore_t&#x7684;&#x7ED3;&#x6784;"></a>dispatch_semaphore_t&#x7684;&#x7ED3;&#x6784;</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> dispatch_semaphore_s {</div><div class="line">    <span class="comment">// &#x5F15;&#x7528;&#x8BA1;&#x6570;&#x4E4B;&#x7C7B;&#x7684;&#x57FA;&#x7840;&#x5C5E;&#x6027;</span></div><div class="line">    OS_OBJECT_STRUCT_HEADER(dispatch_semaphore);</div><div class="line">    <span class="comment">// dispatch&#x57FA;&#x7840;&#x7C7B;&#x7684;&#x5171;&#x6709;&#x53D8;&#x91CF;</span></div><div class="line">    <span class="keyword">struct</span> dispatch_semaphore_s *<span class="keyword">volatile</span> do_next;</div><div class="line">    <span class="keyword">struct</span> dispatch_queue_s *do_targetq;</div><div class="line">    <span class="keyword">void</span> *do_ctxt;</div><div class="line">    <span class="keyword">void</span> *do_finalizer;</div><div class="line">    <span class="comment">// semaphore&#x7684;&#x7279;&#x6709;&#x53D8;&#x91CF;</span></div><div class="line">    <span class="keyword">long</span> <span class="keyword">volatile</span> dsema_value; <span class="comment">// &#x5F53;&#x524D;&#x8D44;&#x6E90;&#x6570;&#x91CF;&#xFF0C;&#x4F1A;&#x52A8;&#x6001;&#x53D8;&#x5316;</span></div><div class="line">    <span class="keyword">long</span> dsema_orig;</div><div class="line">};</div></pre></td></tr></table></figure>
+<p>&#x8FD9;&#x91CC;&#x9762; <strong><em>dsema_value</em></strong> &#x662F;&#x7528;&#x6765;&#x8868;&#x793A;&#x8D44;&#x6E90;&#x6570;&#x7684;&#x503C;&#xFF0C;&#x5F53;&#x7136;&#x5BF9;&#x5B83;&#x7684;&#x589E;&#x51CF;&#x4E5F;&#x90FD;&#x662F;&#x539F;&#x5B50;&#x64CD;&#x4F5C;&#x3002;<strong><em>dispatch_semaphore_t</em></strong> &#x662F; <strong><em>dispatch_semaphore_s</em></strong> &#x7684;&#x6307;&#x9488;&#x8868;&#x793A;&#x3002;</p>
+<hr>
+<h2 id="dispatch-semaphore-create"><a href="#dispatch-semaphore-create" class="headerlink" title="dispatch_semaphore_create"></a>dispatch_semaphore_create</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">dispatch_semaphore_t</span> dispatch_semaphore_create(<span class="keyword">long</span> value) {</div><div class="line">    <span class="keyword">dispatch_semaphore_t</span> dsema;</div><div class="line"></div><div class="line">    <span class="comment">// If the internal value is negative, then the absolute of the value is</span></div><div class="line">    <span class="comment">// equal to the number of waiting threads. Therefore it is bogus to</span></div><div class="line">    <span class="comment">// initialize the semaphore with a negative value.</span></div><div class="line">    <span class="keyword">if</span> (value &lt; <span class="number">0</span>) {</div><div class="line">        <span class="keyword">return</span> DISPATCH_BAD_INPUT;</div><div class="line">    }</div><div class="line"></div><div class="line">    dsema = (<span class="keyword">dispatch_semaphore_t</span>)_dispatch_alloc(DISPATCH_VTABLE(semaphore), <span class="keyword">sizeof</span>(<span class="keyword">struct</span> dispatch_semaphore_s));</div><div class="line"></div><div class="line">    dsema-&gt;do_next = DISPATCH_OBJECT_LISTLESS;</div><div class="line">    dsema-&gt;do_targetq = _dispatch_get_root_queue(_DISPATCH_QOS_CLASS_DEFAULT, <span class="literal">false</span>);</div><div class="line">    dsema-&gt;dsema_value = value;</div><div class="line">    dsema-&gt;dsema_orig = value;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> dsema;</div><div class="line">}</div></pre></td></tr></table></figure>
+<p>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#xFF0C;&#x521B;&#x5EFA; <strong><em>dispatch_semaphore_t</em></strong> &#x5BF9;&#x8C61;&#x7684;&#x65F6;&#x5019;&#x8D44;&#x6E90;&#x6570;&#x4E0D;&#x80FD;&#x5C0F;&#x4E8E;0&#x3002;<br><strong><em>do_targetq</em></strong> &#x8FD8;&#x6CA1;&#x770B;&#x89C1;&#x5728;&#x54EA;&#x91CC;&#x6709;&#x4EC0;&#x4E48;&#x7528;&#xFF0C;&#x5176;&#x4E2D; <strong><em>QOS</em></strong> &#x662F; <strong><em>quality of service</em></strong> &#x7684;&#x7F29;&#x5199;&#x3002;</p>
+<hr>
+<h2 id="dispatch-semaphore-signal"><a href="#dispatch-semaphore-signal" class="headerlink" title="dispatch_semaphore_signal"></a>dispatch_semaphore_signal</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">long</span> <span class="title">dispatch_semaphore_signal</span><span class="params">(<span class="keyword">dispatch_semaphore_t</span> dsema)</span> </span>{</div><div class="line">    <span class="keyword">long</span> value = os_atomic_inc2o(dsema, dsema_value, release);</div><div class="line">    <span class="keyword">if</span> (value &gt; <span class="number">0</span>) {</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>; <span class="comment">// &#x589E;&#x52A0;&#x8D44;&#x6E90;&#x6210;&#x529F;</span></div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="keyword">int</span> ret = sem_post(&amp;dsema-&gt;dsema_sem); <span class="comment">// &#x9700;&#x8981;&#x5524;&#x9192;&#x7EBF;&#x7A0B;</span></div><div class="line">    DISPATCH_SEMAPHORE_VERIFY_RET(ret);</div><div class="line">    <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">}</div></pre></td></tr></table></figure>
+<p>&#x5C31;&#x662F;&#x5BF9; <strong><em>dsema_value</em></strong> &#x52A0;1&#xFF1A;</p>
+<ul class="ui list">
+<li>&#x5982;&#x679C;&#x52A0;1&#x540E;&#x5927;&#x4E8E;0&#xFF0C;&#x90A3;&#x4E48;&#x589E;&#x52A0;&#x8D44;&#x6E90;&#x6210;&#x529F;&#xFF1B;</li>
+<li>&#x5982;&#x679C;&#x52A0;1&#x540E;&#x5C0F;&#x4E8E;&#x7B49;&#x4E8E;0&#xFF0C;&#x8BF4;&#x660E;&#x6709;&#x5730;&#x65B9;&#x8C03;&#x7528;&#x4E86; <strong><em>wait</em></strong> &#x65B9;&#x6CD5;&#x540C;&#x6B65;&#x7B49;&#x5F85;&#x8D44;&#x6E90;&#xFF0C;&#x90A3;&#x5C31;&#x9700;&#x8981;&#x8C03;&#x7528; <strong><em>sem_post</em></strong> &#x5C06;&#x7B49;&#x5F85;&#x7684;&#x7EBF;&#x7A0B;&#x5524;&#x9192;&#x3002;</li>
+</ul>
+<hr>
+<h2 id="dispatch-semaphore-wait"><a href="#dispatch-semaphore-wait" class="headerlink" title="dispatch_semaphore_wait"></a>dispatch_semaphore_wait</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">long</span> <span class="title">dispatch_semaphore_wait</span><span class="params">(<span class="keyword">dispatch_semaphore_t</span> dsema, <span class="keyword">dispatch_time_t</span> timeout)</span> </span>{</div><div class="line">    <span class="keyword">long</span> value = os_atomic_dec2o(dsema, dsema_value, acquire); <span class="comment">// &#x83B7;&#x53D6;&#x8D44;&#x6E90;&#xFF0C;&#x5BF9;&#x8D44;&#x6E90;&#x51CF;1</span></div><div class="line">    <span class="keyword">if</span> (value &gt;= <span class="number">0</span>) {</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>; <span class="comment">// &#x6210;&#x529F;&#x83B7;&#x53D6;&#x8D44;&#x6E90;</span></div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="comment">// &#x4E0B;&#x9762;&#x8FDB;&#x5165;&#x7B49;&#x5F85;&#x72B6;&#x6001;</span></div><div class="line">    <span class="keyword">long</span> orig;</div><div class="line">    <span class="keyword">struct</span> timespec _timeout;</div><div class="line">    <span class="keyword">int</span> ret;</div><div class="line"></div><div class="line">    <span class="keyword">switch</span> (timeout) {</div><div class="line">        <span class="keyword">default</span>: <span class="comment">// &#x9996;&#x5148;&#x662F;&#x81EA;&#x5B9A;&#x4E49;&#x7B49;&#x5F85;&#x65F6;&#x95F4;</span></div><div class="line">            <span class="keyword">do</span> {</div><div class="line">                <span class="keyword">uint64_t</span> nsec = _dispatch_time_nanoseconds_since_epoch(timeout);</div><div class="line">                _timeout.tv_sec = (typeof(_timeout.tv_sec))(nsec / NSEC_PER_SEC);</div><div class="line">                _timeout.tv_nsec = (typeof(_timeout.tv_nsec))(nsec % NSEC_PER_SEC);</div><div class="line">                ret = slowpath(sem_timedwait(&amp;dsema-&gt;dsema_sem, &amp;_timeout)); <span class="comment">// &#x5C1D;&#x8BD5;&#x83B7;&#x53D6;&#x8D44;&#x6E90;&#xFF0C;&#x5E26;&#x6709;&#x65F6;&#x95F4;&#x6709;&#x6548;&#x7684;&#x53C2;&#x6570;</span></div><div class="line">            } <span class="keyword">while</span> (ret == <span class="number">-1</span> &amp;&amp; errno == EINTR);</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (!(ret == <span class="number">-1</span> &amp;&amp; errno == ETIMEDOUT)) {</div><div class="line">                DISPATCH_SEMAPHORE_VERIFY_RET(ret); <span class="comment">// &#x5728;&#x9650;&#x5B9A;&#x65F6;&#x95F4;&#x5185;&#x6210;&#x529F;&#x83B7;&#x53D6;&#x8D44;&#x6E90;</span></div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            }</div><div class="line">            <span class="comment">// Fall through and try to undo what the fast path did to</span></div><div class="line">            <span class="comment">// dsema-&gt;dsema_value</span></div><div class="line">        <span class="keyword">case</span> DISPATCH_TIME_NOW: <span class="comment">// &#x5982;&#x679C;&#x81EA;&#x5B9A;&#x4E49;&#x7B49;&#x5F85;&#x65F6;&#x95F4;&#x5230;&#x4E86;&#xFF0C;&#x5C31;&#x6309;&#x7167;&#x7ACB;&#x5373;&#x83B7;&#x53D6;&#x8D44;&#x6E90;&#x7684;&#x65B9;&#x5F0F;&#x5904;&#x7406;</span></div><div class="line">            orig = dsema-&gt;dsema_value;</div><div class="line">            <span class="keyword">while</span> (orig &lt; <span class="number">0</span>) {</div><div class="line">                <span class="comment">// &#x7B49;&#x5F85;&#x8D85;&#x65F6;&#xFF0C;&#x5C06;&#x8D44;&#x6E90;+1&#xFF0C;&#x56E0;&#x4E3A;&#x4E00;&#x5F00;&#x59CB;&#x5BF9;&#x8D44;&#x6E90;&#x51CF;1&#x4E86;&#xFF0C;&#x6240;&#x4EE5;&#x5F97;&#x52A0;&#x56DE;&#x6765;</span></div><div class="line">                <span class="keyword">if</span> (os_atomic_cmpxchgvw2o(dsema, dsema_value, orig, orig + <span class="number">1</span>, &amp;orig, relaxed)) {</div><div class="line">                    errno = ETIMEDOUT;</div><div class="line">                    <span class="keyword">return</span> <span class="number">-1</span>; <span class="comment">// &#x83B7;&#x53D6;&#x8D44;&#x6E90;&#x5931;&#x8D25;</span></div><div class="line">                }</div><div class="line">            }</div><div class="line">            <span class="comment">// Another thread called semaphore_signal().</span></div><div class="line">            <span class="comment">// Fall through and drain the wakeup.</span></div><div class="line">        <span class="keyword">case</span> DISPATCH_TIME_FOREVER:</div><div class="line">            <span class="keyword">do</span> {</div><div class="line">                ret = sem_wait(&amp;dsema-&gt;dsema_sem);</div><div class="line">            } <span class="keyword">while</span> (ret != <span class="number">0</span>);</div><div class="line">            DISPATCH_SEMAPHORE_VERIFY_RET(ret);</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">    }</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>; <span class="comment">// &#x83B7;&#x53D6;&#x8D44;&#x6E90;&#x6210;&#x529F;</span></div><div class="line">}</div></pre></td></tr></table></figure>
+<p><strong><em>dispatch_semaphore_wait</em></strong> &#x4E00;&#x8FDB;&#x5165;&#x9996;&#x5148;&#x5BF9; <strong><em>dsema_value</em></strong> &#x51CF;1&#xFF0C;&#x5982;&#x679C;&#x51CF;&#x540E;&#x5927;&#x4E8E;&#x7B49;&#x4E8E;0&#xFF0C;&#x90A3;&#x4E48;&#x83B7;&#x53D6;&#x8D44;&#x6E90;&#x6210;&#x529F;&#x3002;&#x5982;&#x679C;&#x83B7;&#x53D6;&#x8D44;&#x6E90;&#x5931;&#x8D25;&#xFF0C;&#x90A3;&#x4E48;&#x8FDB;&#x5165;&#x4E0B;&#x9762;&#x7684;&#x6D41;&#x7A0B;&#x5904;&#x7406;&#xFF1A;</p>
+<ul class="ui list">
+<li><p>&#x81EA;&#x5B9A;&#x4E49;&#x8D85;&#x65F6;&#x65F6;&#x957F;</p>
+<p>  &#x81EA;&#x5B9A;&#x4E49;&#x8D85;&#x65F6;&#x65F6;&#x95F4;&#x7684;&#x8BDD;&#xFF0C;&#x5C31;&#x5728;while&#x5FAA;&#x73AF;&#x4E2D;&#x4E00;&#x904D;&#x904D;&#x53BB;&#x53D6;&#x5C1D;&#x8BD5;&#x5C31;&#x597D;&#x4E86;&#xFF0C;&#x76F4;&#x5230;&#x8D85;&#x65F6;&#xFF0C;&#x5982;&#x679C;&#x5728;&#x9650;&#x65F6;&#x5185;&#x83B7;&#x53D6;&#x5230;&#x4E86;&#x8D44;&#x6E90;&#xFF0C;&#x90A3;&#x5C31;return&#x4E86;&#x3002;&#x5982;&#x679C;&#x83B7;&#x53D6;&#x8D44;&#x6E90;&#x7B49;&#x5F85;&#x8D85;&#x65F6;&#xFF0C;&#x90A3;&#x4E48;&#x5C31;&#x8FDB;&#x5165; <strong><em>&#x7ACB;&#x523B;&#x83B7;&#x53D6;&#x8D44;&#x6E90;</em></strong> &#x7684;case&#x4E2D;&#xFF0C;&#x505A;&#x6700;&#x540E;&#x4E00;&#x6B21;&#x5C1D;&#x8BD5;&#x3002;</p>
+</li>
+<li><p>&#x7ACB;&#x523B;&#x83B7;&#x53D6;&#x8D44;&#x6E90;</p>
+<p>  &#x5982;&#x679C;&#x662F;&#x7ACB;&#x523B;&#x83B7;&#x53D6;&#x8D44;&#x6E90;&#xFF0C;&#x5C31;&#x770B;&#x4E00;&#x4E0B; <strong><em>dsema_value</em></strong> &#x662F;&#x4E0D;&#x662F;&gt;=0&#xFF0C;&#x5982;&#x679C;&#x662F;&#xFF0C;&#x90A3;&#x4E48;&#x8868;&#x793A;&#x8D44;&#x6E90;&#x83B7;&#x53D6;&#x6210;&#x529F;&#x4E86;&#x3002;&#x5426;&#x5219;&#x7684;&#x8BDD;&#x8BF4;&#x660E;&#x8D44;&#x6E90;&#x83B7;&#x53D6;&#x5931;&#x8D25;&#xFF0C;&#x540C;&#x65F6;&#x9000;&#x51FA;&#x7B49;&#x5F85;&#x8FD4;&#x56DE;&#x8D85;&#x65F6;&#xFF0C;&#x56E0;&#x4E3A;&#x4E00;&#x5F00;&#x59CB;&#x5BF9;&#x8D44;&#x6E90;&#x8FDB;&#x884C;&#x4E86;&#x51CF;1&#xFF0C;&#x6240;&#x4EE5;&#x8FD9;&#x65F6;&#x8981;&#x518D;&#x5BF9;&#x91CD;&#x65B0;&#x8D44;&#x6E90;&#x52A0;1&#xFF0C;&#x8868;&#x793A;&#x4E0D;&#x5728;&#x7B49;&#x5F85;&#x3002;</p>
+</li>
+<li><p>&#x4E00;&#x76F4;&#x7B49;&#x5F85;&#x8D44;&#x6E90;</p>
+<p>  &#x6700;&#x540E;&#x4E00;&#x79CD;case&#xFF0C;&#x5C31;&#x662F; <strong><em>DISPATCH_TIME_FOREVER</em></strong> &#x4E00;&#x76F4;&#x7B49;&#x5F85;&#xFF0C;&#x5C31;&#x5728;while&#x5FAA;&#x73AF;&#x4E2D;&#x4E00;&#x76F4;&#x8C03;&#x7528; <strong><em>sem_wait</em></strong> &#x7B49;&#x5F85;&#x5C31;&#x597D;&#x3002;&#x5176;&#x4E2D; <strong><em>sem_wait</em></strong> &#x5BF9;&#x5E94;&#x7684;&#x5524;&#x9192;&#x65B9;&#x6CD5;&#x5E94;&#x8BE5;&#x5C31;&#x662F;&#x524D;&#x9762;&#x7684; <strong><em>sem_post</em></strong>&#x3002;&#x7531;&#x6B64;&#x53EF;&#x89C1; <strong><em>dsema_value</em></strong> &#x7684;&#x503C;&#x662F;&#x6709;&#x53EF;&#x80FD;&#x4E3A;&#x8D1F;&#x6570;&#x7684;&#xFF0C;&#x8BF4;&#x660E;&#x5F53;&#x524D;&#x6709;&#x6392;&#x961F;&#x7B49;&#x5F85;&#x8D44;&#x6E90;&#x7684;&#x60C5;&#x51B5;&#x3002;</p>
+</li>
+</ul>
+<hr>
+<p>&#x5BF9;&#x6E90;&#x7801;&#x7684;&#x7FFB;&#x8BD1;&#x6709;&#x8BEF;&#x5E0C;&#x671B;&#x5927;&#x5BB6;&#x4F7F;&#x52B2;&#x62CD;&#x3002;</p>
+
+                        
+                    </div>
+
+                    
+                    
+                    
+
+                    <div class="description post-description">
+    <span class="post-description-item">
+        <time datetime="2017-03-13T07:47:10.000Z" itemprop="datePublished">2017-03-13</time>
+
+    </span>
+    <span class="post-description-item">
+        
+
+    <span>
+        <i class="tags icon"></i>
+    </span>
+
+    
+    <span class="ui tiny label">
+        <a href="/tags/libdispatch/">libdispatch</a>
+    </span>
+
+    
+    <span class="ui tiny label">
+        <a href="/tags/GCD/">GCD</a>
+    </span>
+
+    
+
+    </span>
+</div>
+
+                </div>
+                
+                <div id="pagination" class="nav-web ui text container pagination">
+
+    <div class="ui stackable two column divided grid container">
+        <div class="row">
+            <div class="column nav-left">
+                
+
+                <a class="ui tiny button disabled"><i class="angle left icon"></i>Previous</a>
+
+                
+            </div>
+            <div class="column nav-right">
+                
+
+                <a href="/2017/02/21/扒了扒libdispatch源码/" class="ui tiny button">
+                    
+                    扒了扒libdispatch源码
+                    
+                    <i class="angle right icon"></i></a>
+                
+            </div>
+        </div>
+    </div>
+
+</div>
+                
+            </div>
+
+            
+            <div class="three wide computer three wide tablet column">
+
+                <div class="ui sticky article-toc" id="article-toc">
+                    <!-- toc -->
+                    <ol class="ui ordered list"><li><a href="#dispatch-semaphore-t的结构"><span>dispatch_semaphore_t的结构</span></a><ol><li><a href="#dispatch-semaphore-create"><span>dispatch_semaphore_create</span></a></li><li><a href="#dispatch-semaphore-signal"><span>dispatch_semaphore_signal</span></a></li><li><a href="#dispatch-semaphore-wait"><span>dispatch_semaphore_wait</span></a></li></ol></li></ol>
+                </div>
+
+            </div>
+            
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- css -->
+  <style type="text/css">
+      .center {
+          text-align: center;
+      }
+      .hidden {
+          display: none;
+      }
+    .donate_bar a.btn_donate{
+      display: inline-block;
+      width: 82px;
+      height: 82px;
+      background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+      _background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+      <!-- http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif
+           因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+         为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+         嵌入其它博客时不一定要它们。 -->
+      -webkit-transition: background 0s;
+      -moz-transition: background 0s;
+      -o-transition: background 0s;
+      -ms-transition: background 0s;
+      transition: background 0s;
+      <!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+    }
+    .donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+    .donate_bar .donate_txt {
+      display: block;
+      color: #9d9d9d;
+      font: 14px/2 "Microsoft Yahei";
+    }
+    .bold{ font-weight: bold; }
+  </style>
+<!-- /css -->
+<!-- Donate Module -->
+  <div id="donate_module">
+  <!-- btn_donate & tips -->
+    <div id="donate_board" class="donate_bar center">      
+    <br>
+    <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+    <span class="donate_txt">
+      我知道不会有人打赏，可是万一有人想不开呢？
+    </span>    
+    </div>
+  <!-- /btn_donate & tips -->
+  <!-- donate guide -->
+    <div id="donate_guide" class="donate_bar center hidden">
+    <br>
+      <a title="用微信扫一扫哦~" class="fancybox" rel="article0">
+        <img src="/images/wechat_small.jpg" title="微信打赏 Joe" height="190px" width="auto"/>
+      </a>&nbsp;&nbsp;
+      <!-- 暂时不需要支付宝，只用微信支付就好了
+      <a href="/images/alipay_small.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+        <img src="/images/alipay_small.jpg" title="支付宝打赏 Joe" height="190px" width="auto"/>
+      </a>
+      -->
+      <span class="donate_txt">
+        我知道不会有人打赏，可是万一有人想不开呢？
+      </span>
+    </div>
+  <!-- /donate guide -->
+<!-- donate script -->
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function() {
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+    function donate_on_web(){
+      $('#donate').submit();
+        }
+    var original_window_onload = window.onload;
+        window.onload = function () {
+            if (original_window_onload) {
+                original_window_onload();
+            }
+            //document.getElementById('donate_board_wdg').className = 'hidden';
+    }
+  </script>
+<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+
+
+
+
+<!-- duoshuo start -->
+<div class="ds-thread" data-thread-key="2017/03/13/dispatch_semaphore搬运源码/" data-title="dispatch_semaphore搬运源码 | Joe&#39;s Doc" data-url="http://yoursite.com/2017/03/13/dispatch_semaphore搬运源码/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"joegithubio"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- duoshuo end -->
+
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+        <div class="ui vertical footer segment">
+    <div class="ui center aligned container">
+        <div class="ui inverted section divider"></div>
+        &copy; 2017 <a href="/">Joe Lee</a>,
+        Powered by <a href="https://github.com/henryhuang/hexo-theme-aloha" target="_blank">Aloha</a> and <a
+                href="http://hexo.io/" target="_blank">Hexo</a>.
+    </div>
+</div>
+
+    </div>
+
+
+
+
+<!-- scripts list from theme config.yml -->
+
+<script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+
+<script src="//cdn.bootcss.com/semantic-ui/2.2.4/semantic.min.js"></script>
+
+<script src="//cdn.bootcss.com/algoliasearch/3.18.1/algoliasearch.min.js"></script>
+
+<script src="//cdn.bootcss.com/algoliasearch-helper-js/2.13.0/algoliasearch.helper.min.js"></script>
+
+<script src="/js/semantic-ui-algolia.js"></script>
+
+<script src="/js/aloha-events.js"></script>
+
+
+
+</body>
+</html>
