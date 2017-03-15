@@ -1,0 +1,397 @@
+
+
+<!DOCTYPE html>
+<html lang="null">
+<head prefix="og: http://ogp.me/ns#">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <meta name="description" content="null">
+    <title>进程通信 NSPipe | Joe&#39;s Doc</title>
+
+    <!-- Open Graph -->
+    <meta name="description" content="&amp;#x4ECA;&amp;#x5929;&amp;#x7814;&amp;#x7A76; NSLog &amp;#x6548;&amp;#x7387;&amp;#x95EE;&amp;#x9898;&amp;#x7684;&amp;#x65F6;&amp;#x5019;&amp;#x53D1;&amp;#x73B0;&amp;#x4E00;&amp;#x4E2A;&amp;#x6709;&amp;#x610F;&amp;#x601D;&amp;#x7684;&amp;#x7C7B; NSPipe&amp;#xFF0C;&amp;#x7528;&amp;#x6765;&amp;#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="进程通信 NSPipe">
+<meta property="og:url" content="http://yoursite.com/2017/03/15/009.NSPipe/index.html">
+<meta property="og:site_name" content="Joe's Doc">
+<meta property="og:description" content="&amp;#x4ECA;&amp;#x5929;&amp;#x7814;&amp;#x7A76; NSLog &amp;#x6548;&amp;#x7387;&amp;#x95EE;&amp;#x9898;&amp;#x7684;&amp;#x65F6;&amp;#x5019;&amp;#x53D1;&amp;#x73B0;&amp;#x4E00;&amp;#x4E2A;&amp;#x6709;&amp;#x610F;&amp;#x601D;&amp;#x7684;&amp;#x7C7B; NSPipe&amp;#xFF0C;&amp;#x7528;&amp;#x6765;&amp;#">
+<meta property="og:updated_time" content="2017-03-15T09:05:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="进程通信 NSPipe">
+<meta name="twitter:description" content="&amp;#x4ECA;&amp;#x5929;&amp;#x7814;&amp;#x7A76; NSLog &amp;#x6548;&amp;#x7387;&amp;#x95EE;&amp;#x9898;&amp;#x7684;&amp;#x65F6;&amp;#x5019;&amp;#x53D1;&amp;#x73B0;&amp;#x4E00;&amp;#x4E2A;&amp;#x6709;&amp;#x610F;&amp;#x601D;&amp;#x7684;&amp;#x7C7B; NSPipe&amp;#xFF0C;&amp;#x7528;&amp;#x6765;&amp;#">
+
+    <script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Person",
+  "email": "mailto:undefined",
+  "image": "undefined",
+  "name": "Joe Lee",
+  "url": "http://yoursite.com"
+}
+</script>
+    <script>
+    var algoliaEnabled = false;
+    
+</script>
+
+    
+
+    
+    
+        <link href="https://fonts.gmirror.org/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+    
+    
+    
+        <!-- stylesheets list from config.yml -->
+        
+        <link rel="stylesheet" href="/css/aloha.css">
+        
+        <link rel="stylesheet" href="//cdn.bootcss.com/semantic-ui/2.2.4/semantic.min.css">
+        
+        <link rel="stylesheet" href="//cdn.bootcss.com/magnific-popup.js/1.1.0/magnific-popup.min.css">
+        
+    
+
+</head>
+<body id="body" style="margin-bottom: 0;" class="pushable">
+
+    <div class="ui top fixed menu">
+        <a class="item" id="menu-icon"><i class="sidebar icon"></i></a>
+    </div>
+
+    <div id="menu-sidebar" class="ui left vertical sidebar menu">
+
+    <div id="sidebar-top">
+        <div class="content">
+            <h3>Joe&#39;s Doc</h3>
+        </div>
+    </div>
+    <div class="ui container sidebar-card">
+    <div class="ui people shape content">
+        <div class="active side">
+            <div class="ui card">
+                <div class="image">
+                    <img class="ui medium bordered image" src="/images/me.jpg">
+                </div>
+                <div class="content">
+                    <a class="header">Joe Lee</a>
+                    
+                        <div class="meta">
+                            Developer/iOS/Basketball
+                        </div>
+                    
+                </div>
+                <div class="extra content">
+                    <div class="ui list">
+                        
+                        <div class="item">
+                            <i class="marker icon" style="float: left"></i>
+                            <div class="content">Beijing</div>
+                        </div>
+                        
+                        
+                        <div class="item">
+                            <i class="mail icon" style="float: left"></i>
+                            <div class="content">
+                                <a href="mailto:zhuocheng.lee@gmail.com">zhuocheng.lee@gmail.com</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                </div>
+                <div class="extra content">
+                    <div class="ui list">
+                        
+
+                                <a href="https://github.com/joeleee"><i class="large github icon" style="float: left"></i></a>
+
+                            
+
+                                <a href="http://weibo.com/209093838?is_all=1"><i class="large weibo icon" style="float: left"></i></a>
+
+                            
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+    
+    
+
+    
+
+    
+    <a href="/index.html" class="item" >
+        <i class="home icon"></i>
+        Home
+    </a>
+
+    
+
+    
+</div>
+
+    <div class="pusher body-content">
+        <div id="content" class="ui main container">
+            <!--<div class="ui one column grid">-->
+                <!--<div class="column">-->
+                    <!--<div class="ui main container">-->
+                        <div id="post-009.NSPipe" class="ui main container article-type-post">
+
+    
+
+    <div class="ui divided grid">
+
+        <div class="two column row" id="article-content">
+
+            <div class="thirteen wide computer thirteen wide tablet sixteen wide mobile column">
+                
+
+<h1 class="ui header">
+    
+    进程通信 NSPipe
+</h1>
+
+
+
+                <div class="article-inner">
+
+                    <div class="article-entry" itemprop="articleBody">
+                        
+                        <p>&#x4ECA;&#x5929;&#x7814;&#x7A76; <strong><em>NSLog</em></strong> &#x6548;&#x7387;&#x95EE;&#x9898;&#x7684;&#x65F6;&#x5019;&#x53D1;&#x73B0;&#x4E00;&#x4E2A;&#x6709;&#x610F;&#x601D;&#x7684;&#x7C7B; <strong><em>NSPipe</em></strong>&#xFF0C;&#x7528;&#x6765;&#x8FDB;&#x7A0B;&#x95F4;&#x901A;&#x4FE1;&#xFF0C;&#x6CA1;&#x7528;&#x8FC7;&#xFF0C;&#x8D44;&#x6599;&#x4E5F;&#x5F88;&#x5C11;&#x3002;&#x53C2;&#x8003;&#xFF1A;<a href="http://www.tuicool.com/articles/muUvIb" target="_blank" rel="external">iOS IO &#x91CD;&#x5B9A;&#x5411;&#xFF08;NSLog to UITextView&#xFF09;</a></p>
+<p>&#x539F;&#x7406;&#x5F88;&#x7B80;&#x5355;&#x5440;&#xFF0C;&#x5C31;&#x662F;&#x4E00;&#x6839;&#x7BA1;&#x9053;&#xFF08;&#x961F;&#x5217;&#xFF09;&#xFF0C;&#x4E00;&#x7AEF;&#x5199;&#xFF0C;&#x4E00;&#x7AEF;&#x8BFB;&#xFF0C;&#x901A;&#x8FC7;&#x8FD9;&#x79CD;&#x65B9;&#x5F0F;&#x8FBE;&#x5230;&#x8FDB;&#x7A0B;&#x95F4;&#x901A;&#x4FE1;&#x7684;&#x76EE;&#x7684;&#x3002;&#x7F51;&#x4E0A;&#x6709;&#x4E2A;&#x5B9E;&#x9645;&#x4F7F;&#x7528;&#x7684;&#x4F8B;&#x5B50;&#xFF0C;&#x5C06;iOS&#x7684;IO&#x6807;&#x51C6;&#x8F93;&#x51FA;&#x91CD;&#x5B9A;&#x5411;&#x5230;&#x6211;&#x4EEC;&#x81EA;&#x5DF1;&#x7BA1;&#x9053;&#xFF0C;&#x7136;&#x540E;&#x6211;&#x4EEC;&#x5C31;&#x53EF;&#x4EE5;&#x6355;&#x83B7;NSLog&#x548C;print&#x8FD9;&#x4E9B;&#x6807;&#x51C6;&#x8F93;&#x51FA;&#x4E86;&#x3002;</p>
+<p>&#x53EF;&#x4EE5;&#x7528;&#x6765;&#x628A;log&#x6253;&#x5728;&#x81EA;&#x5DF1;&#x7684;&#x6587;&#x4EF6;&#x4E2D;&#xFF0C;&#x611F;&#x89C9;&#x6709;&#x70B9;&#x9ED1;&#x79D1;&#x6280;&#xFF0C;&#x5B9E;&#x4E0D;&#x5B9E;&#x7528;&#x5F97;&#x770B;&#x60C5;&#x51B5;&#x4E86;&#x3002;</p>
+<p>Example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)fileHandleReadCompletionNotification:(NSNotification *)notification {</div><div class="line">    NSData *logData = [[notification userInfo] objectForKey:NSFileHandleNotificationDataItem];</div><div class="line">    NSString *logString = [[NSString alloc] initWithData:logData encoding:NSUTF8StringEncoding];</div><div class="line"></div><div class="line">    <span class="comment">/*logString&#x53EF;&#x4EE5;&#x8F93;&#x51FA;&#x5728;&#x4F60;&#x559C;&#x6B22;&#x7684;&#x5730;&#x65B9;&#xFF0C;&#x4F46;&#x662F;&#x8FD9;&#x91CC;&#x9762;&#x4E0D;&#x80FD;&#x518D;&#x8C03;&#x7528;&#x6807;&#x51C6;&#x8F93;&#x51FA;&#x4E86;*/</span></div><div class="line"></div><div class="line">    [[notification object] readInBackgroundAndNotify];</div><div class="line">}</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)redirectSTD:(<span class="keyword">int</span>)fileDescriptor {</div><div class="line">    NSPipe *pipe = [NSPipe pipe] ;</div><div class="line">    NSFileHandle *pipeReadHandle = [pipe fileHandleForReading] ;</div><div class="line">    dup2([[pipe fileHandleForWriting] fileDescriptor], fileDescriptor) ;</div><div class="line"></div><div class="line">    [[NSNotificationCenter defaultCenter] addObserver:self</div><div class="line">                                             selector:@selector(fileHandleReadCompletionNotification:)</div><div class="line">                                                 name:NSFileHandleReadCompletionNotification</div><div class="line">                                               object:pipeReadHandle];</div><div class="line">    [pipeReadHandle readInBackgroundAndNotify];</div><div class="line">}</div><div class="line"></div><div class="line"></div><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {</div><div class="line">    <span class="comment">// Override point for customization after application launch.</span></div><div class="line">    [self redirectSTD:STDOUT_FILENO];</div><div class="line">    [self redirectSTD:STDERR_FILENO];</div><div class="line">    <span class="keyword">return</span> YES;</div><div class="line">}</div></pre></td></tr></table></figure>
+<hr>
+
+                        
+                    </div>
+
+                    
+                    
+                    
+
+                    <div class="description post-description">
+    <span class="post-description-item">
+        <time datetime="2017-03-15T08:47:10.000Z" itemprop="datePublished">2017-03-15</time>
+
+    </span>
+    <span class="post-description-item">
+        
+
+    <span>
+        <i class="tags icon"></i>
+    </span>
+
+    
+    <span class="ui tiny label">
+        <a href="/tags/pipe/">pipe</a>
+    </span>
+
+    
+    <span class="ui tiny label">
+        <a href="/tags/thread/">thread</a>
+    </span>
+
+    
+    <span class="ui tiny label">
+        <a href="/tags/进程间通信/">进程间通信</a>
+    </span>
+
+    
+
+    </span>
+</div>
+
+                </div>
+                
+                <div id="pagination" class="nav-web ui text container pagination">
+
+    <div class="ui stackable two column divided grid container">
+        <div class="row">
+            <div class="column nav-left">
+                
+
+                <a class="ui tiny button disabled"><i class="angle left icon"></i>前一篇</a>
+
+                
+            </div>
+            <div class="column nav-right">
+                
+
+                <a href="/2017/03/13/008.fucking-clang-warnings/" class="ui tiny button">
+                    
+                    fucking clang warnings
+                    
+                    <i class="angle right icon"></i></a>
+                
+            </div>
+        </div>
+    </div>
+
+</div>
+                
+            </div>
+
+            
+            <div class="three wide computer three wide tablet column">
+
+                <div class="ui sticky article-toc" id="article-toc">
+                    <!-- toc -->
+                    
+                </div>
+
+            </div>
+            
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- css -->
+  <style type="text/css">
+      .center {
+          text-align: center;
+      }
+      .hidden {
+          display: none;
+      }
+    .donate_bar a.btn_donate{
+      display: inline-block;
+      width: 82px;
+      height: 82px;
+      background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+      _background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+      <!-- http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif
+           因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+         为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+         嵌入其它博客时不一定要它们。 -->
+      -webkit-transition: background 0s;
+      -moz-transition: background 0s;
+      -o-transition: background 0s;
+      -ms-transition: background 0s;
+      transition: background 0s;
+      <!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+    }
+    .donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+    .donate_bar .donate_txt {
+      display: block;
+      color: #9d9d9d;
+      font: 14px/2 "Microsoft Yahei";
+    }
+    .bold{ font-weight: bold; }
+  </style>
+<!-- /css -->
+<!-- Donate Module -->
+  <div id="donate_module">
+  <!-- btn_donate & tips -->
+    <div id="donate_board" class="donate_bar center">      
+    <br>
+    <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+    <span class="donate_txt">
+      我知道不会有人打赏，可是万一有人想不开呢？
+    </span>    
+    </div>
+  <!-- /btn_donate & tips -->
+  <!-- donate guide -->
+    <div id="donate_guide" class="donate_bar center hidden">
+    <br>
+      <a title="用微信扫一扫哦~" class="fancybox" rel="article0">
+        <img src="/images/wechat_small.jpg" title="微信打赏 Joe" height="190px" width="auto"/>
+      </a>&nbsp;&nbsp;
+      <!-- 暂时不需要支付宝，只用微信支付就好了
+      <a href="/images/alipay_small.jpg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+        <img src="/images/alipay_small.jpg" title="支付宝打赏 Joe" height="190px" width="auto"/>
+      </a>
+      -->
+      <span class="donate_txt">
+        我知道不会有人打赏，可是万一有人想不开呢？
+      </span>
+    </div>
+  <!-- /donate guide -->
+<!-- donate script -->
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function() {
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+    function donate_on_web(){
+      $('#donate').submit();
+        }
+    var original_window_onload = window.onload;
+        window.onload = function () {
+            if (original_window_onload) {
+                original_window_onload();
+            }
+            //document.getElementById('donate_board_wdg').className = 'hidden';
+    }
+  </script>
+<!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+
+
+
+
+<!-- duoshuo start -->
+<div class="ds-thread" data-thread-key="2017/03/15/009.NSPipe/" data-title="进程通信 NSPipe | Joe&#39;s Doc" data-url="http://yoursite.com/2017/03/15/009.NSPipe/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    var duoshuoQuery = {short_name:"joegithubio"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- duoshuo end -->
+
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+        <div class="ui vertical footer segment">
+    <div class="ui center aligned container">
+        <div class="ui inverted section divider"></div>
+        &copy; 2017 <a href="/">Joe Lee</a>,
+        Powered by <a href="https://github.com/henryhuang/hexo-theme-aloha" target="_blank">Aloha</a> and <a
+                href="http://hexo.io/" target="_blank">Hexo</a>.
+    </div>
+</div>
+
+    </div>
+
+
+
+
+<!-- scripts list from theme config.yml -->
+
+<script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+
+<script src="//cdn.bootcss.com/semantic-ui/2.2.4/semantic.min.js"></script>
+
+<script src="//cdn.bootcss.com/algoliasearch/3.18.1/algoliasearch.min.js"></script>
+
+<script src="//cdn.bootcss.com/algoliasearch-helper-js/2.13.0/algoliasearch.helper.min.js"></script>
+
+<script src="/js/semantic-ui-algolia.js"></script>
+
+<script src="/js/aloha-events.js"></script>
+
+
+
+</body>
+</html>
